@@ -2,19 +2,28 @@
 
 public class CameraController : MonoBehaviour
 {
-    public float panSpeed = 15f;
-    public float panBorderThickness = 20f;
-    public Vector2 panLimit;
+    [SerializeField]
+    private float panSpeed = 15f;
+    [SerializeField]
+    private float panBorderThickness = 40f;
+    [SerializeField]
+    private Vector2 panLimit;
 
-    public float scrollsSpeed = 20f;
-    public float minY = 20f;
-    public float maxY = 50f;
+    [SerializeField]
+    private float scrollsSpeed = 20f;
+    [SerializeField]
+    private float minY = 20f;
+    [SerializeField]
+    private float maxY = 50f;
 
+    [SerializeField]
+    private float rotSpeed = 5f;
     // Update is called once per frame
     void Update()
     {
         Vector3 pos = transform.position;
-        if(Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - panBorderThickness)
+        float rot = 0f;
+        if (Input.GetKey(KeyCode.W) || Input.mousePosition.y >= Screen.height - panBorderThickness)
         {
             pos.z += panSpeed * Time.deltaTime;
         }
@@ -30,6 +39,15 @@ public class CameraController : MonoBehaviour
         {
             pos.x += panSpeed * Time.deltaTime;
         }
+        if(Input.GetKey(KeyCode.LeftArrow))
+        {
+            rot = 1.0f * rotSpeed * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            rot = -1.0f * rotSpeed * Time.deltaTime;
+        }
+
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         pos.y -= scroll * scrollsSpeed * 100f * Time.deltaTime;
@@ -38,8 +56,8 @@ public class CameraController : MonoBehaviour
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
         pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
 
-        
-
+        //transform.localEulerAngles.Set()
+        transform.localRotation = Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y + rot, transform.localEulerAngles.z);
         transform.position = pos;
     }
 }

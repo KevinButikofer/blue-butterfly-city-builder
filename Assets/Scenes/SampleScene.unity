@@ -295,6 +295,7 @@ MonoBehaviour:
   scrollsSpeed: 20
   minY: 10
   maxY: 100
+  rotSpeed: 40
 --- !u!1 &989047175
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 989047176}
   - component: {fileID: 989047177}
+  - component: {fileID: 989047178}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -335,11 +337,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 989047175}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1452167303b056489e4174281064840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrain: {fileID: 1824195777}
+--- !u!114 &989047178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989047175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d797ae177e31a64798423c8d19c0a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  housePrefab: {fileID: 5464415691150874808, guid: df55278604356314eaa1a43330e88ae1,
+  housePrefab: {fileID: 2919553493731427761, guid: 5bace5719de7d634e91f6ad1a572845a,
     type: 3}
+  roadPrefab: {fileID: 6515598379899186869, guid: 3c4feaa9a1b9abb4bb9df6d7383fac33,
+    type: 3}
+  placementZonePrefab: {fileID: 3823833642401829675, guid: 5f14321ffbea0454aa38e152913c08d9,
+    type: 3}
+  correctPlacementColor: {r: 0.9653882, g: 1, b: 0.033018887, a: 0.6156863}
+  unCorrectPlacementColor: {r: 1, g: 0, b: 0, a: 0.85490197}
+  bulldozerCursor: {fileID: 2800000, guid: 2fb76c91c0bed3f47b282197ab14b7e2, type: 3}
 --- !u!1 &1824195775
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,7 +373,6 @@ GameObject:
   - component: {fileID: 1824195778}
   - component: {fileID: 1824195777}
   - component: {fileID: 1824195776}
-  - component: {fileID: 1824195779}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: terrain
@@ -420,15 +441,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1824195779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1824195775}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1452167303b056489e4174281064840, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
