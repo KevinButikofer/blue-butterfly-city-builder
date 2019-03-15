@@ -10,7 +10,9 @@ public class GridManager : MonoBehaviour
     private Vector3 TerrainSize;
     [SerializeField]
     private Terrain terrain;
-    private List<PowerProvidingBuiding> powerProviderBuildings;
+    private List<PowerProviderBuilding> powerProviderBuildings = new List<PowerProviderBuilding>();
+
+    public List<PowerProviderBuilding> PowerProviderBuildings { get => powerProviderBuildings; set => powerProviderBuildings = value; }
 
     public void Start()
     {
@@ -62,9 +64,32 @@ public class GridManager : MonoBehaviour
     {
         gridBuilding.Remove(idx);
     }
-    public void UpdatePower()
+    public void UpdatePower(int IdToIgnore)
     {
-        powerProviderBuildings.ForEach(a => a.UpdatePower());
+        foreach(KeyValuePair<int, Building> item in gridBuilding)
+        {
+            if(item.Value is PowerNeedBuilding)
+            {
+                item.Value.IsPowered = false;
+            }            
+        }
+        for(int i = 0; i < powerProviderBuildings.Count - 1; i++)
+        {
+            if (i != IdToIgnore)
+            {
+                powerProviderBuildings[i].UpdatePower();
+            }
+        }
     }
-
+    public bool CheckPowerAvailability(Vector3 pos)
+    {
+        foreach(PowerProviderBuilding b in PowerProviderBuildings)
+        {
+            if(b.IsInRange(pos))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

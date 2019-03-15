@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using UnityEditor;
 using AseFxaa;
+using UnityEngine.Networking;
 
 namespace AseFxaa
 {

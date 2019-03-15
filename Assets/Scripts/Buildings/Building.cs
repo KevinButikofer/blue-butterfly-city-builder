@@ -18,11 +18,12 @@ public class Building : MonoBehaviour
     private Vector3Int size;
     private int idx;
     private Building[] connectedBuidings;
+    protected GridManager grid;
 
-    public Building()
+    public void Awake()
     {
+        grid = FindObjectOfType<GridManager>();
     }
-
     public int Power { get => power;}
     public int Price { get => price; }
     public int MaintenanceCost { get => maintenanceCost; }

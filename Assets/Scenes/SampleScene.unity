@@ -357,7 +357,11 @@ MonoBehaviour:
     type: 3}
   roadPrefab: {fileID: 6515598379899186869, guid: 3c4feaa9a1b9abb4bb9df6d7383fac33,
     type: 3}
+  powerPrefab: {fileID: 8784731922563449709, guid: d40ad0a21f398ca46b987c9d9a3f100d,
+    type: 3}
   placementZonePrefab: {fileID: 3823833642401829675, guid: 5f14321ffbea0454aa38e152913c08d9,
+    type: 3}
+  powerZonePrefab: {fileID: 2080447423726666653, guid: 2d816eeadb0d78c40ae5e908c4c36a5c,
     type: 3}
   correctPlacementColor: {r: 0.9653882, g: 1, b: 0.033018887, a: 0.6156863}
   unCorrectPlacementColor: {r: 1, g: 0, b: 0, a: 0.85490197}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkPlace : Building
+public class WorkPlace : PowerNeedBuilding
 {
     [SerializeField]
     private int workerCapacity;

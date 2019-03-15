@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Home : Building
+public class Home : PowerNeedBuilding
 {
     [SerializeField]
     private int residentCapacity;
