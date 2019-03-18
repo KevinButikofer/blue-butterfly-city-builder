@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 
 public class BuildingPlacer : MonoBehaviour
 {
-
+    
     [SerializeField]
     private GameObject housePrefab;
     [SerializeField]
@@ -41,89 +43,131 @@ public class BuildingPlacer : MonoBehaviour
         placementZone = Instantiate(placementZonePrefab, new Vector3(0, -1, 0), new Quaternion());
         powerZone = Instantiate(powerZonePrefab, new Vector3(0, -1, 0), new Quaternion());
     }
+    public void OnMouseDown()
+    {
+        Debug.Log("in2");
 
+        if (!EventSystem.current.IsPointerOverGameObject() || isUsingDestroyTool)
+        {
+            handleMouse();
+        }
+        
+        
+
+    }
+
+    public void OnMouseDrag()
+    {
+        if (!EventSystem.current.IsPointerOverGameObject() || isUsingDestroyTool)
+        {
+            if (curentBuilding is Road || isUsingDestroyTool)
+            {
+                handleMouse();
+
+            }
+        }
+    }
+
+
+
+    void handleMouse()
+    {
+
+        Debug.Log("handlemouse, isusingdestroytools: "+isUsingDestroyTool);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo))
+        {
+            if (hitInfo.transform.tag == "terrain" && !isUsingDestroyTool)
+            {
+                PlaceNearCube(hitInfo.point);
+            }
+            if (hitInfo.transform.tag == "Building" && isUsingDestroyTool)
+            {
+                grid.RemoveBuiding(hitInfo.transform.GetComponent<Building>().Idx);
+                GameObject.Destroy(hitInfo.transform.gameObject);
+            }
+        }
+    }
     // Update is called once per frame
     void Update()
     {
         //Mouse position
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo))
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (Input.GetMouseButton(0))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
                 if (hitInfo.transform.tag == "terrain" && !isUsingDestroyTool)
                 {
-                    PlaceNearCube(hitInfo.point);
-                }
-                if (hitInfo.transform.tag == "Building" && isUsingDestroyTool)
-                {
-                    grid.RemoveBuiding(hitInfo.transform.GetComponent<Building>().Idx);
-                    GameObject.Destroy(hitInfo.transform.gameObject);
-                }
-            }
-            if (hitInfo.transform.tag == "terrain" && !isUsingDestroyTool)
-            {                
-                placementZone.SetActive(true);
-                placementZone.transform.localScale = new Vector3(curentBuilding.Size.x, 0.2f, curentBuilding.Size.z);
-                
-                if (grid.GetNearestPointOnGrid(hitInfo.point, curentBuilding.Size, out Vector3 resultPos))
-                {
-                    placementZone.GetComponent<Renderer>().material.color = correctPlacementColor;
-                    PowerProviderBuilding building = curentBuilding.GetComponent<PowerProviderBuilding>();
-                    if(building != null)
+                    placementZone.SetActive(true);
+                    placementZone.transform.localScale = new Vector3(curentBuilding.Size.x, 0.2f, curentBuilding.Size.z);
+
+                    if (grid.GetNearestPointOnGrid(hitInfo.point, curentBuilding.Size, out Vector3 resultPos))
                     {
-                        powerZone.SetActive(true);
-                        powerZone.transform.position = resultPos;
-                        powerZone.transform.localScale = new Vector3(building.PowerRange, 0.5f, building.PowerRange);
+                        placementZone.GetComponent<Renderer>().material.color = correctPlacementColor;
+                        PowerProviderBuilding building = curentBuilding.GetComponent<PowerProviderBuilding>();
+                        if (building != null)
+                        {
+                            powerZone.SetActive(true);
+                            powerZone.transform.position = resultPos;
+                            powerZone.transform.localScale = new Vector3(building.PowerRange, 0.5f, building.PowerRange);
+                        }
+                        else
+                        {
+                            powerZone.SetActive(false);
+                        }
                     }
                     else
                     {
-                        powerZone.SetActive(false);
+                        placementZone.GetComponent<Renderer>().material.color = unCorrectPlacementColor;
                     }
+                    placementZone.transform.position = resultPos;
+                    placementZone.transform.Translate(new Vector3(0.0f, 0.1f, 0.0f));
+
+                }
+                else if (hitInfo.transform.tag == "Building" && Input.GetMouseButtonDown(0))
+                {
+                    Debug.Log(hitInfo.transform.gameObject.GetComponent<Building>().IsPowered);
                 }
                 else
                 {
-                    placementZone.GetComponent<Renderer>().material.color = unCorrectPlacementColor;
+                    placementZone.SetActive(false);
+                    powerZone.SetActive(false);
                 }
-                placementZone.transform.position = resultPos;
-                placementZone.transform.Translate(new Vector3(0.0f, 0.1f, 0.0f));
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                if (curentPrefab == housePrefab)
+                    curentPrefab = roadPrefab;
+                else if (curentPrefab == roadPrefab)
+                    curentPrefab = powerPrefab;
+                else
+                    curentPrefab = housePrefab;
 
+                curentBuilding = curentPrefab.GetComponent<Building>();
             }
-            else if (hitInfo.transform.tag == "Building" && Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                Debug.Log(hitInfo.transform.gameObject.GetComponent<Building>().IsPowered);
-            }
-            else
-            {
-                placementZone.SetActive(false);
-                powerZone.SetActive(false);
+                if (isUsingDestroyTool)
+                {
+                    isUsingDestroyTool = false;
+                    Cursor.SetCursor(null, hotSpot, CursorMode.Auto);
+                }
+                else
+                {
+                    isUsingDestroyTool = true;
+                    Cursor.SetCursor(bulldozerCursor, hotSpot, CursorMode.Auto);
+                }
             }
         }
-        if(Input.GetKeyDown(KeyCode.Q))
-        {
-            if (curentPrefab == housePrefab)
-                curentPrefab = roadPrefab;
-            else if (curentPrefab == roadPrefab)
-                curentPrefab = powerPrefab;
-            else
-                curentPrefab = housePrefab;
 
-            curentBuilding = curentPrefab.GetComponent<Building>();
-        }
-        if(Input.GetKeyDown(KeyCode.E))
+        else
         {
-            if(isUsingDestroyTool)
-            {
-                isUsingDestroyTool = false;
-                Cursor.SetCursor(null, hotSpot, CursorMode.Auto);
-            }
-            else
-            {
-                isUsingDestroyTool = true;
-                Cursor.SetCursor(bulldozerCursor, hotSpot, CursorMode.Auto);
-            }
+            placementZone.SetActive(false);
         }
     }
+    
+    
 
     /// <summary>
     /// Place the currnet buiding near the mouse position

@@ -31,4 +31,29 @@ public class Building : MonoBehaviour
     public bool IsReachable { get => isReachable; set => isReachable = value; }
     public Vector3Int Size { get => size; set => size = value; }
     public int Idx { get => idx; set => idx = value; }
+
+    BuildingPlacer buildingPlacer;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        buildingPlacer = FindObjectOfType<BuildingPlacer>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void OnMouseDown()
+    {
+        buildingPlacer.OnMouseDown();
+
+    }
+
+    private void OnMouseDrag()
+    {
+        buildingPlacer.OnMouseDrag();
+    }
 }
