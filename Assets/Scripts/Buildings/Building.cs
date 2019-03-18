@@ -34,4 +34,20 @@ public class Building : MonoBehaviour
     public Vector3Int Size { get => size; set => size = value; }
     public int Idx { get => idx; set => idx = value; }
     public string DisplayName { get => displayName; set => displayName = value; }
+
+    BuildingPlacer buildingPlacer;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        buildingPlacer = FindObjectOfType<BuildingPlacer>();
+    }    
+    public void OnMouseDown()
+    {
+        buildingPlacer.OnMouseDown();
+    }
+    private void OnMouseDrag()
+    {
+        buildingPlacer.OnMouseDrag();
+    }
 }
