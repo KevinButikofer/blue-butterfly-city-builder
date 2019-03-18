@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BuildingPlacer : MonoBehaviour
 {
-
+    private Dictionary<string, GameObject> buidingPrefabs = new Dictionary<string, GameObject>();
     [SerializeField]
     private GameObject housePrefab;
     [SerializeField]
@@ -32,9 +32,19 @@ public class BuildingPlacer : MonoBehaviour
     private GridManager grid;
     private bool isUsingDestroyTool = false;
 
+    public Dictionary<string, GameObject> BuidingPrefabs { get => buidingPrefabs; set => buidingPrefabs = value; }
+
     private void Awake()
     {
-        grid = FindObjectOfType<GridManager>();
+        
+        Object[] prefabs = Resources.LoadAll("BuildingPrefabs", typeof(GameObject));
+        foreach(Object o in prefabs)
+        {
+            Building b = (o as GameObject).GetComponent<Building>();
+            buidingPrefabs.Add(b.DisplayName, b.gameObject);
+        }
+
+       grid = FindObjectOfType<GridManager>();
         curentPrefab = housePrefab;
         curentBuilding = curentPrefab.GetComponent<Building>();
 

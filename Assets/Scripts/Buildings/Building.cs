@@ -5,6 +5,8 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
     [SerializeField]
+    private string displayName;
+    [SerializeField]
     private int power;
     [SerializeField]
     private int price;
@@ -31,4 +33,5 @@ public class Building : MonoBehaviour
     public bool IsReachable { get => isReachable; set => isReachable = value; }
     public Vector3Int Size { get => size; set => size = value; }
     public int Idx { get => idx; set => idx = value; }
+    public string DisplayName { get => displayName; set => displayName = value; }
 }

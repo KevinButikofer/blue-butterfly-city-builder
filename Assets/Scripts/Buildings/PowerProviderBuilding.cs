@@ -22,7 +22,9 @@ public class PowerProviderBuilding : Building
         {
             if (col.gameObject.tag == "Building")
             {
-                Building b = col.GetComponent<Building>(); 
+                Building b = col.GetComponent<Building>();
+                if (b == null)
+                    b = col.GetComponentInChildren<Building>();
                 if(!(b is PowerProviderBuilding))
                     b.IsPowered = powerStatus;
             }
