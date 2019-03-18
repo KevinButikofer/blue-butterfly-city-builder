@@ -56,7 +56,6 @@ public class CameraController : MonoBehaviour
         pos.y = Mathf.Clamp(pos.y, minY, maxY);
         pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
 
-        //transform.localEulerAngles.Set()
         transform.localRotation = Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y + rot, transform.localEulerAngles.z);
         transform.position = pos;
     }

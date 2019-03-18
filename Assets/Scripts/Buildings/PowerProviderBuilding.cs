@@ -6,10 +6,15 @@ public class PowerProviderBuilding : Building
 {
     [SerializeField]
     private int powerRange = 1;
+    private int remainingPower;
     
-
     public int PowerRange { get => powerRange; set => powerRange = value; }
-    
+    public int RemainingPower { get => remainingPower; set => remainingPower = value; }
+
+    /// <summary>
+    /// Give power in the range of the buiding
+    /// </summary>
+    /// <param name="powerStatus"></param>
     public void UpdatePower(bool powerStatus = true)
     {
         Collider[] cols = Physics.OverlapSphere(transform.position, PowerRange);
@@ -32,6 +37,11 @@ public class PowerProviderBuilding : Building
         Debug.Log("Destroy");
         UpdatePower(false);
     }
+    /// <summary>
+    /// is the pos in the range of the buiding
+    /// </summary>
+    /// <param name="otherPos"></param>
+    /// <returns></returns>
     public bool IsInRange(Vector3 otherPos)
     {
         if(Vector3.Distance(transform.position, otherPos) - powerRange <= 0.0f)

@@ -45,6 +45,7 @@ public class BuildingPlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Mouse position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hitInfo))
         {
@@ -124,6 +125,10 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Place the currnet buiding near the mouse position
+    /// </summary>
+    /// <param name="clickPoint"></param>
     public void PlaceNearCube(Vector3 clickPoint)
     {
         Building b = curentPrefab.GetComponent<Building>();

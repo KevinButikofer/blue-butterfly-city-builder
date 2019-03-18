@@ -6,6 +6,9 @@ public class Road : Building
 {
     private float range = 2.1f;
 
+    /// <summary>
+    /// update reachability of the near building
+    /// </summary>
     public void UpdateReacheable()
     {
         Collider[] cols = Physics.OverlapSphere(transform.position, range);
