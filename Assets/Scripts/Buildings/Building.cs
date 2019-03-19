@@ -44,10 +44,10 @@ public class Building : MonoBehaviour
     }    
     public void OnMouseDown()
     {
-        buildingPlacer.OnMouseDown();
+        buildingPlacer.OnBuildingClick(this);
     }
     private void OnMouseDrag()
     {
-        buildingPlacer.OnMouseDrag();
+        buildingPlacer.OnBuildingClick(this);
     }
 }

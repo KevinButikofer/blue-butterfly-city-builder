@@ -6,13 +6,10 @@ using UnityEngine.EventSystems;
 
 public class BuildingPlacer : MonoBehaviour
 {
-    private Dictionary<string, GameObject> buidingPrefabs = new Dictionary<string, GameObject>();
-    [SerializeField]
-    private GameObject housePrefab;
-    [SerializeField]
-    private GameObject roadPrefab;
-    [SerializeField]
-    private GameObject powerPrefab;
+    private List<GameObject> buildingPrefabs = new List<GameObject>();
+    private int currentIdx = 0;
+    //private List<string> buildingLabels = new List<string>();
+
     [SerializeField]
     private GameObject placementZonePrefab;
     private GameObject placementZone;
@@ -34,21 +31,19 @@ public class BuildingPlacer : MonoBehaviour
     private GridManager grid;
     private bool isUsingDestroyTool = false;
 
-    public Dictionary<string, GameObject> BuidingPrefabs { get => buidingPrefabs; set => buidingPrefabs = value; }
 
     private void Awake()
     {
-        
         Object[] prefabs = Resources.LoadAll("BuildingPrefabs", typeof(GameObject));
         foreach(Object o in prefabs)
         {
-            Building b = (o as GameObject).GetComponent<Building>();
-            buidingPrefabs.Add(b.DisplayName, b.gameObject);
+            GameObject b = o as GameObject;
+            buildingPrefabs.Add(b);
         }
 
-       grid = FindObjectOfType<GridManager>();
-        curentPrefab = housePrefab;
-        curentBuilding = curentPrefab.GetComponent<Building>();
+        grid = FindObjectOfType<GridManager>();
+        curentPrefab = buildingPrefabs[0];
+        curentBuilding = curentPrefab.GetComponentInChildren<Building>();
 
         placementZone = Instantiate(placementZonePrefab, new Vector3(0, -1, 0), new Quaternion());
         powerZone = Instantiate(powerZonePrefab, new Vector3(0, -1, 0), new Quaternion());
@@ -69,7 +64,6 @@ public class BuildingPlacer : MonoBehaviour
             if (curentBuilding is Road || isUsingDestroyTool)
             {
                 handleMouse();
-
             }
         }
     }
@@ -87,10 +81,19 @@ public class BuildingPlacer : MonoBehaviour
             }
             if (hitInfo.transform.tag == "Building" && isUsingDestroyTool)
             {
-                grid.RemoveBuiding(hitInfo.transform.GetComponent<Building>().Idx);
-                GameObject.Destroy(hitInfo.transform.gameObject);
+                DestroyClickedBuiding(hitInfo.transform.GetComponent<Building>());
             }
         }
+    }
+    public void OnBuildingClick(Building b)
+    {
+        if (isUsingDestroyTool)
+            DestroyClickedBuiding(b);
+    }
+    private void DestroyClickedBuiding(Building b)
+    {
+        grid.RemoveBuiding(b.Idx);
+        GameObject.Destroy(b.transform.parent.gameObject);
     }
     // Update is called once per frame
     void Update()
@@ -141,14 +144,23 @@ public class BuildingPlacer : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                if (curentPrefab == housePrefab)
+                if(currentIdx < buildingPrefabs.Count - 1)
+                {
+                    currentIdx++;
+                }
+                else
+                {
+                    currentIdx = 0;
+                }
+                /*if (curentPrefab == housePrefab)
                     curentPrefab = roadPrefab;
                 else if (curentPrefab == roadPrefab)
                     curentPrefab = powerPrefab;
                 else
-                    curentPrefab = housePrefab;
+                    curentPrefab = housePrefab;*/
 
-                curentBuilding = curentPrefab.GetComponent<Building>();
+                curentPrefab = buildingPrefabs[currentIdx];
+                curentBuilding = buildingPrefabs[currentIdx].GetComponentInChildren<Building>();
             }
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -179,7 +191,7 @@ public class BuildingPlacer : MonoBehaviour
     /// <param name="clickPoint"></param>
     public void PlaceNearCube(Vector3 clickPoint)
     {
-        Building b = curentPrefab.GetComponent<Building>();
+        Building b = curentPrefab.GetComponentInChildren<Building>();
         if (grid.GetNearestPointOnGrid(clickPoint, b.Size, out Vector3 finalPosition))
         {
             GameObject obj = Instantiate(curentPrefab);

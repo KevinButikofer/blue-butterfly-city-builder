@@ -62,7 +62,7 @@ public class GridManager : MonoBehaviour
         Collider[] cols = Physics.OverlapBox(pos, buildingSize / 1.95f, new Quaternion());
         foreach (Collider col in cols)
         {
-            if (col.gameObject.tag == "Road" && col.gameObject.GetComponent<Building>().IsReachable)
+            if (col.gameObject.tag == "Road" && col.gameObject.GetComponentInParent<Building>().IsReachable)
             {
                 b.IsReachable = true;
             }
