@@ -5,6 +5,8 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
     [SerializeField]
+    private string displayName;
+    [SerializeField]
     private int power;
     [SerializeField]
     private int price;
@@ -31,6 +33,7 @@ public class Building : MonoBehaviour
     public bool IsReachable { get => isReachable; set => isReachable = value; }
     public Vector3Int Size { get => size; set => size = value; }
     public int Idx { get => idx; set => idx = value; }
+    public string DisplayName { get => displayName; set => displayName = value; }
 
     BuildingPlacer buildingPlacer;
 
@@ -38,22 +41,13 @@ public class Building : MonoBehaviour
     void Start()
     {
         buildingPlacer = FindObjectOfType<BuildingPlacer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    }    
     public void OnMouseDown()
     {
-        buildingPlacer.OnMouseDown();
-
+        buildingPlacer.OnBuildingClick(this);
     }
-
     private void OnMouseDrag()
     {
-        buildingPlacer.OnMouseDrag();
+        buildingPlacer.OnBuildingClick(this);
     }
 }
