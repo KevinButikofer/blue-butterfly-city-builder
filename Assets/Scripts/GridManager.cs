@@ -6,18 +6,19 @@ public class GridManager : MonoBehaviour
 {
     [SerializeField]
     private readonly int size = 1;
-    private Dictionary<int, Building> gridBuilding;
+    private List<Building> gridBuilding = new List<Building>();
     private Vector3 TerrainSize;
     [SerializeField]
     private Terrain terrain;
+    private Vector3 terrainCenter;
     private List<PowerProviderBuilding> powerProviderBuildings = new List<PowerProviderBuilding>();
 
     public List<PowerProviderBuilding> PowerProviderBuildings { get => powerProviderBuildings; set => powerProviderBuildings = value; }
 
     public void Start()
     {
-        gridBuilding = new Dictionary<int, Building>();
-        TerrainSize = terrain.GetComponent<Terrain>().terrainData.size; 
+        TerrainSize = terrain.GetComponent<Terrain>().terrainData.size;
+        terrainCenter = new Vector3(terrain.transform.position.x + TerrainSize.x / 2, 0, terrain.transform.position.z + TerrainSize.z / 2);
     }
     /// <summary>
     /// Get the neareast point near of the user click and return is avaiblility 
@@ -37,8 +38,14 @@ public class GridManager : MonoBehaviour
             (float)xCount * size,
             position.y,
             (float)zCount * size);
+
+        if (resultPos.x > TerrainSize.x / 2)
+            return false;
         
         resultPos += transform.position;
+        Bounds bounds = new Bounds(terrainCenter, TerrainSize / 1.03f);
+        if(!bounds.Contains(resultPos))
+            return false;
 
         Collider[] cols = Physics.OverlapBox(resultPos, buildingSize/2.05f, new Quaternion());
         foreach(Collider col in cols)
@@ -74,16 +81,15 @@ public class GridManager : MonoBehaviour
     /// <param name="b"></param>
     public void AddBuiding(Building b)
     {
-        b.Idx = gridBuilding.Count;
-        gridBuilding.Add(gridBuilding.Count, b);
+        gridBuilding.Add(b);
     }
     /// <summary>
     /// remove the buiding with the given key
     /// </summary>
     /// <param name="idx">key of the building in the dictonnary</param>
-    public void RemoveBuiding(int idx)
+    public void RemoveBuiding(Building b)
     {
-        gridBuilding.Remove(idx);
+        gridBuilding.Remove(b);
     }
     /// <summary>
     /// reset the power status of all non energy provider building
@@ -91,11 +97,11 @@ public class GridManager : MonoBehaviour
     /// <param name="IdToIgnore">Buiding who is going to be destroy</param>
     public void UpdatePower(int IdToIgnore)
     {
-        foreach(KeyValuePair<int, Building> item in gridBuilding)
+        foreach(Building b in gridBuilding)
         {
-            if(item.Value is PowerNeedBuilding)
+            if(b is PowerNeedBuilding)
             {
-                item.Value.IsPowered = false;
+                b.IsPowered = false;
             }            
         }
         for(int i = 0; i < powerProviderBuildings.Count - 1; i++)
@@ -122,4 +128,24 @@ public class GridManager : MonoBehaviour
         }
         return false;
     }
+
+    public void UpdateGameVar(out int nbJobs, out int habitantCapacity, out int money)
+    {
+        nbJobs = 0;
+        habitantCapacity = 0;
+        money = 0;
+        foreach (Building b in gridBuilding)
+        {            
+            if (b is WorkPlace)
+            {
+                nbJobs += (b as WorkPlace).WorkerCapacity;
+            }
+            if (b is Home)
+            {
+                habitantCapacity += (b as Home).ResidentCapacity;
+            }
+            money -= b.MaintenanceCost;
+        }
+    }
+
 }

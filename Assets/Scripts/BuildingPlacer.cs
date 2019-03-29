@@ -30,7 +30,9 @@ public class BuildingPlacer : MonoBehaviour
 
     private GridManager grid;
     private bool isUsingDestroyTool = false;
+    private MyGameManager myGameManager;
 
+    public MyGameManager MyGameManager { get => myGameManager; set => myGameManager = value; }
 
     private void Awake()
     {
@@ -92,7 +94,7 @@ public class BuildingPlacer : MonoBehaviour
     }
     private void DestroyClickedBuiding(Building b)
     {
-        grid.RemoveBuiding(b.Idx);
+        grid.RemoveBuiding(b);
         GameObject.Destroy(b.transform.parent.gameObject);
     }
     // Update is called once per frame
@@ -192,24 +194,29 @@ public class BuildingPlacer : MonoBehaviour
     public void PlaceNearCube(Vector3 clickPoint)
     {
         Building b = curentPrefab.GetComponentInChildren<Building>();
-        if (grid.GetNearestPointOnGrid(clickPoint, b.Size, out Vector3 finalPosition))
+        if (myGameManager.Money - b.Price > 0)
         {
-            GameObject obj = Instantiate(curentPrefab);
-            obj.transform.position = finalPosition;
+            if (grid.GetNearestPointOnGrid(clickPoint, b.Size, out Vector3 finalPosition))
+            {
 
-            PowerNeedBuilding powerNeedBuilding = b as PowerNeedBuilding;
-            powerNeedBuilding?.CheckPowerAvailability();
+                GameObject obj = Instantiate(curentPrefab);
+                obj.transform.position = finalPosition;
 
-            Road road = b as Road;
-            road?.UpdateReacheable();
+                PowerNeedBuilding powerNeedBuilding = b as PowerNeedBuilding;
+                powerNeedBuilding?.CheckPowerAvailability();
 
-            if(b is PowerProviderBuilding)
-            { 
-                PowerProviderBuilding powerBuilding = b as PowerProviderBuilding;
-                powerBuilding.UpdatePower();
-                grid.PowerProviderBuildings.Add(powerBuilding);
+                Road road = b as Road;
+                road?.UpdateReacheable();
+
+                if (b is PowerProviderBuilding)
+                {
+                    PowerProviderBuilding powerBuilding = b as PowerProviderBuilding;
+                    powerBuilding.UpdatePower();
+                    grid.PowerProviderBuildings.Add(powerBuilding);
+                }
+                grid.AddBuiding(b);
             }
-        }        
+        }
     }
     
 }
