@@ -8,6 +8,9 @@ public class ui_event : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
     IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler,
     IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+
+    public Canvas canvasBuildings;
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("Drag Begin");
@@ -28,7 +31,7 @@ public class ui_event : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
     {
        
             Debug.Log("Clicked: " + eventData.pointerCurrentRaycast.gameObject.name);
-
+        canvasBuildings.gameObject.SetActive(true);
         
 
     }
