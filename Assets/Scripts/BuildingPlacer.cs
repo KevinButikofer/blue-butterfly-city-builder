@@ -188,6 +188,7 @@ public class BuildingPlacer : MonoBehaviour
     /// <param name="clickPoint"></param>
     public void PlaceNearCube(Vector3 clickPoint)
     {
+
         Building b = curentPrefab.GetComponentInChildren<Building>();
         if (myGameManager.Money - b.Price > 0)
         {
@@ -215,6 +216,29 @@ public class BuildingPlacer : MonoBehaviour
                 }
                 
                 grid.AddBuiding(b);
+                List<TreeInstance> trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
+                List<TreeInstance> toRemove = new List<TreeInstance>();
+                foreach (TreeInstance tree in trees)
+                {
+                    Vector3 treePosition = Vector3.Scale(tree.position, Terrain.activeTerrain.terrainData.size);
+                    float treeX = treePosition.x - Terrain.activeTerrain.terrainData.size.x / 2;
+                    float treeZ = treePosition.z - Terrain.activeTerrain.terrainData.size.z / 2;
+
+                    if ( treeX <= b.transform.parent.position.x + b.Size.x/1.8  && treeX >= b.transform.parent.position.x - b.Size.x / 2.2)
+                    {
+                        if(treeZ <= b.transform.parent.position.z + b.Size.z/1.8 && treeZ >= b.transform.parent.position.z - b.Size.z /2.2)
+                        {
+                            Debug.Log("in if");
+                            toRemove.Add(tree);
+                        }
+                        
+
+                    }
+                }
+                foreach (TreeInstance item in toRemove) trees.Remove(item);
+                Terrain.activeTerrain.terrainData.treeInstances = trees.ToArray();
+
+
             }
         }
     }
