@@ -50,4 +50,9 @@ public class Building : MonoBehaviour
     {
         buildingPlacer.OnBuildingClick(this);
     }
+
+    public virtual List<string> getBuildingInfo()
+    {
+        return null;
+    }
 }

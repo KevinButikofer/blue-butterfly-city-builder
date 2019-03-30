@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
+
 
 public class CameraController : MonoBehaviour
 {
@@ -18,11 +20,17 @@ public class CameraController : MonoBehaviour
 
     [SerializeField]
     private float rotSpeed = 5f;
+    private Vector3 originalPos;
 
     Vector3 fixedPoint;
     bool rotateLeft = false;
     bool rotateRight = false;
     // Update is called once per frame
+
+    private void Start()
+    {
+        originalPos = transform.position;
+    }
     void Update()
     {
         RaycastHit hit;
@@ -93,7 +101,7 @@ public class CameraController : MonoBehaviour
         //pos.z += scroll * scrollsSpeed * 100f * Time.deltaTime;
 
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0 && pos.y > minY || Input.GetAxis("Mouse ScrollWheel") < 0 && pos.y < maxY) // Zoom
+        if (Input.GetAxis("Mouse ScrollWheel") > 0 && pos.y > minY && !EventSystem.current.IsPointerOverGameObject() || Input.GetAxis("Mouse ScrollWheel") < 0 && pos.y < maxY && !EventSystem.current.IsPointerOverGameObject()) // Zoom
         {
 
             Vector3 desiredPosition;
@@ -113,9 +121,10 @@ public class CameraController : MonoBehaviour
         }
         else // Déplacement
         {
-            pos.x = Mathf.Clamp(pos.x, -panLimit.x, panLimit.x);
+
+            pos.x = Mathf.Clamp(pos.x, -panLimit.x + originalPos.x, panLimit.x + originalPos.x);
             pos.y = Mathf.Clamp(pos.y, minY, maxY);
-            pos.z = Mathf.Clamp(pos.z, -panLimit.y, panLimit.y);
+            pos.z = Mathf.Clamp(pos.z, -panLimit.y*3 + originalPos.z, panLimit.y + originalPos.z);
 
             transform.localRotation = Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y + rot, transform.localEulerAngles.z);
             transform.position = pos;

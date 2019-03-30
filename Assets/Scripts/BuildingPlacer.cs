@@ -31,18 +31,19 @@ public class BuildingPlacer : MonoBehaviour
     private GridManager grid;
     private bool isUsingDestroyTool = false;
 
+    public List<GameObject> BuildingPrefabs { get => buildingPrefabs; set => buildingPrefabs = value; }
 
-    private void Awake()
+    private void Start()
     {
         Object[] prefabs = Resources.LoadAll("BuildingPrefabs", typeof(GameObject));
         foreach(Object o in prefabs)
         {
             GameObject b = o as GameObject;
-            buildingPrefabs.Add(b);
+            BuildingPrefabs.Add(b);
         }
 
         grid = FindObjectOfType<GridManager>();
-        curentPrefab = buildingPrefabs[0];
+        curentPrefab = BuildingPrefabs[0];
         curentBuilding = curentPrefab.GetComponentInChildren<Building>();
 
         placementZone = Instantiate(placementZonePrefab, new Vector3(0, -1, 0), new Quaternion());
@@ -144,23 +145,7 @@ public class BuildingPlacer : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                if(currentIdx < buildingPrefabs.Count - 1)
-                {
-                    currentIdx++;
-                }
-                else
-                {
-                    currentIdx = 0;
-                }
-                /*if (curentPrefab == housePrefab)
-                    curentPrefab = roadPrefab;
-                else if (curentPrefab == roadPrefab)
-                    curentPrefab = powerPrefab;
-                else
-                    curentPrefab = housePrefab;*/
-
-                curentPrefab = buildingPrefabs[currentIdx];
-                curentBuilding = buildingPrefabs[currentIdx].GetComponentInChildren<Building>();
+                switchBuilding(currentIdx, true);
             }
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -210,6 +195,35 @@ public class BuildingPlacer : MonoBehaviour
                 grid.PowerProviderBuildings.Add(powerBuilding);
             }
         }        
+    }
+
+    public void switchBuilding(int index, bool isQInput = false)
+    {
+        if(isQInput)
+        {
+            if (index < BuildingPrefabs.Count - 1)
+            {
+                currentIdx++;
+            }
+            else
+            {
+                currentIdx = 0;
+            }
+        }
+        else
+        {
+            currentIdx = index;
+        }
+
+        /*if (curentPrefab == housePrefab)
+            curentPrefab = roadPrefab;
+        else if (curentPrefab == roadPrefab)
+            curentPrefab = powerPrefab;
+        else
+            curentPrefab = housePrefab;*/
+
+        curentPrefab = BuildingPrefabs[currentIdx];
+        curentBuilding = BuildingPrefabs[currentIdx].GetComponentInChildren<Building>();
     }
     
 }

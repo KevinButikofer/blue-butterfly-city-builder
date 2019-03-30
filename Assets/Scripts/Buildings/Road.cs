@@ -21,4 +21,15 @@ public class Road : Building
             }
         }
     }
+
+    override public List<string> getBuildingInfo()
+    {
+        List<string> list = new List<string>();
+        list.Add("Building: " + this.DisplayName);
+        list.Add("Price: " + this.Price);
+        list.Add("Power consumption: " + this.Power);
+        list.Add("Maintenance cost: " + this.MaintenanceCost);
+        list.Add("Description: This is a road dude, what are you expecting?");
+        return list;
+    }
 }

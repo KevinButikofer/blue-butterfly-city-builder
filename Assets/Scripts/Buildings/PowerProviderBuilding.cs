@@ -11,6 +11,11 @@ public class PowerProviderBuilding : Building
     public int PowerRange { get => powerRange; set => powerRange = value; }
     public int RemainingPower { get => remainingPower; set => remainingPower = value; }
 
+    [SerializeField]
+    private int workerCapacity;
+
+    public int WorkerCapacity { get => workerCapacity; }
+
     /// <summary>
     /// Give power in the range of the buiding
     /// </summary>
@@ -47,5 +52,17 @@ public class PowerProviderBuilding : Building
         if(Vector3.Distance(transform.position, otherPos) - powerRange <= 0.0f)
             return true;
         return false;
+    }
+
+    override public List<string> getBuildingInfo()
+    {
+        List<string> list = new List<string>();
+        list.Add("Building: " + this.DisplayName);
+        list.Add("Price: " + this.Price);
+        list.Add("Worker capacity: " + this.workerCapacity);
+        list.Add("Power consumption: " + this.Power);
+        list.Add("Maintenance cost: " + this.MaintenanceCost);
+        list.Add("Description: So...you want some of my electricity, do you? Well, for once the rich white man is in control!");
+        return list;
     }
 }
