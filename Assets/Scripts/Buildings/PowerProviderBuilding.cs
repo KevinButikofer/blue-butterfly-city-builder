@@ -34,7 +34,6 @@ public class PowerProviderBuilding : Building
     }
     private void OnDestroy()
     {
-        Debug.Log("Destroy");
         UpdatePower(false);
     }
     /// <summary>

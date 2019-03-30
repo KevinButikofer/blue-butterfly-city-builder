@@ -69,6 +69,6 @@ public class MyGameManager : MonoBehaviour
         {
             Debug.Log("You loose git gud Noob");
         }
-       Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money);
+       //Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money);
     }
 }

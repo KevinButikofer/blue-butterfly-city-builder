@@ -19,18 +19,26 @@ public class Building : MonoBehaviour
     [SerializeField]
     private Vector3Int size;
     private int idx;
+    public static int count=0;
     private Building[] connectedBuidings;
     protected GridManager grid;
 
+    public Building()
+    {
+        this.Idx = count;
+        count++;
+    }
     public void Awake()
     {
         grid = FindObjectOfType<GridManager>();
+        buildingPlacer = FindObjectOfType<BuildingPlacer>();
+
     }
     public int Power { get => power;}
     public int Price { get => price; }
     public int MaintenanceCost { get => maintenanceCost; }
     public bool IsPowered { get => isPowered; set => isPowered = value; }
-    public bool IsReachable { get => isReachable; set => isReachable = value; }
+    public bool IsReachable { get => isReachable; set => isReachable = value;}
     public Vector3Int Size { get => size; set => size = value; }
     public int Idx { get => idx; set => idx = value; }
     public string DisplayName { get => displayName; set => displayName = value; }
@@ -40,7 +48,6 @@ public class Building : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        buildingPlacer = FindObjectOfType<BuildingPlacer>();
     }    
     public void OnMouseDown()
     {

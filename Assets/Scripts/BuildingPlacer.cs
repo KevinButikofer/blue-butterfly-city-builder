@@ -12,6 +12,8 @@ public class BuildingPlacer : MonoBehaviour
 
     [SerializeField]
     private GameObject placementZonePrefab;
+    [SerializeField]
+    private CityCenter cityCenter;
     private GameObject placementZone;
     [SerializeField]
     private GameObject powerZonePrefab;
@@ -30,6 +32,7 @@ public class BuildingPlacer : MonoBehaviour
 
     private GridManager grid;
     private bool isUsingDestroyTool = false;
+    [SerializeField]
     private MyGameManager myGameManager;
 
     public MyGameManager MyGameManager { get => myGameManager; set => myGameManager = value; }
@@ -52,7 +55,6 @@ public class BuildingPlacer : MonoBehaviour
     }
     public void OnMouseDown()
     {
-        Debug.Log("in2");
         if (!EventSystem.current.IsPointerOverGameObject() || isUsingDestroyTool)
         {
             handleMouse();
@@ -72,8 +74,7 @@ public class BuildingPlacer : MonoBehaviour
 
     void handleMouse()
     {
-
-        Debug.Log("handlemouse, isusingdestroytools: "+isUsingDestroyTool);
+        //Debug.Log("handlemouse, isusingdestroytools: "+isUsingDestroyTool);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hitInfo))
         {
@@ -95,7 +96,17 @@ public class BuildingPlacer : MonoBehaviour
     private void DestroyClickedBuiding(Building b)
     {
         grid.RemoveBuiding(b);
-        GameObject.Destroy(b.transform.parent.gameObject);
+        if (b is Road)
+        {
+            GameObject.Destroy(b.transform.parent.gameObject);
+            grid.ResetReacheabillity();
+            cityCenter.UpdateReacheability(b as Road);
+        }
+        else
+        {
+            GameObject.Destroy(b.transform.parent.gameObject);
+        }
+       
     }
     // Update is called once per frame
     void Update()
@@ -136,7 +147,7 @@ public class BuildingPlacer : MonoBehaviour
                 }
                 else if (hitInfo.transform.tag == "Building" && Input.GetMouseButtonDown(0))
                 {
-                    Debug.Log(hitInfo.transform.gameObject.GetComponent<Building>().IsPowered);
+                    Debug.Log(hitInfo.transform.gameObject.GetComponent<Building>().IsReachable);
                 }
                 else
                 {
@@ -198,15 +209,19 @@ public class BuildingPlacer : MonoBehaviour
         {
             if (grid.GetNearestPointOnGrid(clickPoint, b.Size, out Vector3 finalPosition))
             {
-
                 GameObject obj = Instantiate(curentPrefab);
                 obj.transform.position = finalPosition;
+
+                b = obj.GetComponentInChildren<Building>();
 
                 PowerNeedBuilding powerNeedBuilding = b as PowerNeedBuilding;
                 powerNeedBuilding?.CheckPowerAvailability();
 
                 Road road = b as Road;
-                road?.UpdateReacheable();
+                if (road != null)
+                {
+                    road.UpdateReacheable();
+                }
 
                 if (b is PowerProviderBuilding)
                 {
@@ -214,6 +229,7 @@ public class BuildingPlacer : MonoBehaviour
                     powerBuilding.UpdatePower();
                     grid.PowerProviderBuildings.Add(powerBuilding);
                 }
+                
                 grid.AddBuiding(b);
             }
         }
