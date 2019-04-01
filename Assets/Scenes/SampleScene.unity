@@ -8538,7 +8538,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 420030489}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.5005988
+  m_Size: 0.39520958
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9339,7 +9339,7 @@ Terrain:
   serializedVersion: 3
   m_TerrainData: {fileID: 15600000, guid: c5c89c5083089aa4cabea0cbee027384, type: 2}
   m_TreeDistance: 5000
-  m_TreeBillboardDistance: 50
+  m_TreeBillboardDistance: 994
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
   m_DetailObjectDistance: 122
