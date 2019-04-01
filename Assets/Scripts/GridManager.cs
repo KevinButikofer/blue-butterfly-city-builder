@@ -15,6 +15,7 @@ public class GridManager : MonoBehaviour
     private List<PowerProviderBuilding> powerProviderBuildings = new List<PowerProviderBuilding>();
 
     public List<PowerProviderBuilding> PowerProviderBuildings { get => powerProviderBuildings; set => powerProviderBuildings = value; }
+    public Dictionary<int, Building> GridBuilding { get => gridBuilding; set => gridBuilding = value; }
 
     public void Start()
     {
@@ -51,7 +52,11 @@ public class GridManager : MonoBehaviour
         Collider[] cols = Physics.OverlapBox(resultPos, buildingSize/2.05f, new Quaternion());
         foreach(Collider col in cols)
         {
-            if(col.gameObject.tag == "Building")
+            if(col.gameObject.tag == "Building" || col.gameObject.tag == "Mountain" )
+            {
+                return false;
+            }
+            if(col.gameObject.transform.parent != null && col.gameObject.transform.parent.name == "CityCenter")
             {
                 return false;
             }
@@ -69,10 +74,9 @@ public class GridManager : MonoBehaviour
         buildingSize = new Vector3(buildingSize.x + 1, buildingSize.y + 1, buildingSize.z + 1);
         foreach (Collider col in Helper.CheckConnexity4(pos, new Vector3(buildingSize.x, 0.1f, 0.1f), new Vector3(0.1f, 0.1f, buildingSize.z)))
         {
-            if (col.gameObject.GetComponent<Building>().IsReachable && col.gameObject.GetComponent<Building>() is Road)
-            {
-                
-                //b.IsReachable = true;
+            if (col.gameObject.GetComponent<Building>() != null && col.gameObject.GetComponent<Building>().IsReachable && col.gameObject.GetComponent<Building>() is Road)
+            {                
+               b.IsReachable = true;
             }
         }
     }
@@ -82,7 +86,7 @@ public class GridManager : MonoBehaviour
     /// <param name="b"></param>
     public void AddBuiding(Building b)
     {
-        gridBuilding.Add(b.Idx, b);
+        GridBuilding.Add(b.Idx, b);
     }
     /// <summary>
     /// remove the buiding with the given key
@@ -90,7 +94,7 @@ public class GridManager : MonoBehaviour
     /// <param name="idx">key of the building in the dictonnary</param>
     public void RemoveBuiding(Building b)
     {
-        gridBuilding.Remove(b.Idx);
+        GridBuilding.Remove(b.Idx);
     }
     /// <summary>
     /// reset the power status of all non energy provider building
@@ -98,7 +102,7 @@ public class GridManager : MonoBehaviour
     /// <param name="IdToIgnore">Buiding who is going to be destroy</param>
     public void UpdatePower(int IdToIgnore)
     {
-        foreach(KeyValuePair<int, Building> item  in gridBuilding)
+        foreach(KeyValuePair<int, Building> item  in GridBuilding)
         {
             if(item.Value is PowerNeedBuilding)
             {
@@ -107,7 +111,7 @@ public class GridManager : MonoBehaviour
         }
         for(int i = 0; i < powerProviderBuildings.Count - 1; i++)
         {
-            if (i != IdToIgnore)
+            if (i != IdToIgnore && powerProviderBuildings[i]!=null)
             {
                 powerProviderBuildings[i].UpdatePower();
             }
@@ -116,7 +120,7 @@ public class GridManager : MonoBehaviour
     public void ResetReacheabillity()
     {
         int i = 0;
-        foreach (KeyValuePair<int, Building> item in gridBuilding)
+        foreach (KeyValuePair<int, Building> item in GridBuilding)
         {
             i++;
             item.Value.IsReachable = false;
@@ -127,12 +131,13 @@ public class GridManager : MonoBehaviour
     /// </summary>
     /// <param name="pos">Position of the building</param>
     /// <returns></returns>
-    public bool CheckPowerAvailability(Vector3 pos)
+    public bool CheckPowerAvailability(Building b)
     {
-        foreach(PowerProviderBuilding b in PowerProviderBuildings)
+        foreach(PowerProviderBuilding powerProvider in PowerProviderBuildings)
         {
-            if(b.IsInRange(pos))
+            if(powerProvider.IsInRange(b.transform.position) && powerProvider.RemainingPower > -1*b.Power)
             {
+                powerProvider.RemainingPower += b.Power;
                 return true;
             }
         }
@@ -144,18 +149,25 @@ public class GridManager : MonoBehaviour
         nbJobs = 0;
         habitantCapacity = 0;
         money = 0;
-        foreach (KeyValuePair<int, Building> item in gridBuilding)
-        {            
-            if (item.Value is WorkPlace)
+        foreach (KeyValuePair<int, Building> item in GridBuilding)
+        {
+            if (item.Value.IsReachable && item.Value.IsPowered)
             {
-                nbJobs += (item.Value as WorkPlace).WorkerCapacity;
-            }
-            if (item.Value is Home)
-            {
-                habitantCapacity += (item.Value as Home).ResidentCapacity;
+                if (item.Value is WorkPlace)
+                {
+                    nbJobs += (item.Value as WorkPlace).WorkerCapacity;
+                }
+                if (item.Value is Home)
+                {
+                    habitantCapacity += (item.Value as Home).ResidentCapacity;
+                }
             }
             money -= item.Value.MaintenanceCost;
         }
+    }
+    public int BuildingCount()
+    {
+        return gridBuilding.Where(x => !(x.Value is Road)).Count();
     }
 
 }

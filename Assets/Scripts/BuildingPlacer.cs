@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 
 public class BuildingPlacer : MonoBehaviour
 {
+    readonly WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
     private List<GameObject> buildingPrefabs = new List<GameObject>();
     private int currentIdx = 0;
     //private List<string> buildingLabels = new List<string>();
-
+    [SerializeField]
+    private GameObject buildingsContainer;
     [SerializeField]
     private GameObject placementZonePrefab;
     [SerializeField]
@@ -36,6 +39,8 @@ public class BuildingPlacer : MonoBehaviour
     private MyGameManager myGameManager;
     public MyGameManager MyGameManager { get => myGameManager; set => myGameManager = value; }
     public List<GameObject> BuildingPrefabs { get => buildingPrefabs; set => buildingPrefabs = value; }
+
+    
 
     private void Start()
     {
@@ -111,6 +116,7 @@ public class BuildingPlacer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
         //Mouse position
         if (!EventSystem.current.IsPointerOverGameObject())
         {
@@ -159,6 +165,17 @@ public class BuildingPlacer : MonoBehaviour
             {
                 switchBuilding(currentIdx, true);
             }
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+               
+                /*Building b = Helper.RandomValues(grid.GridBuilding).First();
+                if (b != null)
+                {
+                    GameObject car = GameObject.Instantiate(prefabCar, b.transform.position, new Quaternion());
+                    car.GetComponent<FindPath>().dest = Helper.RandomValues(grid.GridBuilding, b).First();
+                    cars.Add(car);
+                }  */
+            }
             if (Input.GetKeyDown(KeyCode.E))
             {
                 if (isUsingDestroyTool)
@@ -193,7 +210,7 @@ public class BuildingPlacer : MonoBehaviour
         {
             if (grid.GetNearestPointOnGrid(clickPoint, b.Size, out Vector3 finalPosition))
             {
-                GameObject obj = Instantiate(curentPrefab);
+                GameObject obj = Instantiate(curentPrefab, buildingsContainer.transform);
                 obj.transform.position = finalPosition;
 
                 b = obj.GetComponentInChildren<Building>();
@@ -206,12 +223,18 @@ public class BuildingPlacer : MonoBehaviour
                 {
                     road.UpdateReacheable();
                 }
+                else
+                {
+                    grid.GetStatus(b.Size, b.transform.position,b);
+                }
 
                 if (b is PowerProviderBuilding)
                 {
                     PowerProviderBuilding powerBuilding = b as PowerProviderBuilding;
                     powerBuilding.UpdatePower();
                     grid.PowerProviderBuildings.Add(powerBuilding);
+                    powerBuilding.ShowPowerZone(true);
+                    
                 }
                 
                 grid.AddBuiding(b);
@@ -221,7 +244,7 @@ public class BuildingPlacer : MonoBehaviour
 
     public void switchBuilding(int index, bool isQInput = false)
     {
-        if(isQInput)
+        if (isQInput)
         {
             if (index < BuildingPrefabs.Count - 1)
             {
@@ -246,6 +269,14 @@ public class BuildingPlacer : MonoBehaviour
 
         curentPrefab = BuildingPrefabs[currentIdx];
         curentBuilding = BuildingPrefabs[currentIdx].GetComponentInChildren<Building>();
+        if (curentBuilding is PowerProviderBuilding)
+        {
+            grid.PowerProviderBuildings.ForEach(x => x.ShowPowerZone(true));
+        }    
+        else
+        {
+            grid.PowerProviderBuildings.ForEach(x => x.ShowPowerZone(false));
+        }
     }
     
 }

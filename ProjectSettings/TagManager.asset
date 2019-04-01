@@ -6,6 +6,7 @@ TagManager:
   tags:
   - terrain
   - Building
+  - Mountain
   layers:
   - Default
   - TransparentFX

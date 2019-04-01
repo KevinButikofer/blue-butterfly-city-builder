@@ -25,7 +25,7 @@ public class PowerProviderBuilding : Building
         Collider[] cols = Physics.OverlapSphere(transform.position, PowerRange);
         foreach (Collider col in cols)
         {
-            if (col.gameObject.tag == "Building")
+            if (col.gameObject != null && col.gameObject.tag == "Building")
             {
                 Building b = col.GetComponent<Building>();
                 if(!(b is PowerProviderBuilding))
@@ -63,5 +63,10 @@ public class PowerProviderBuilding : Building
         list.Add("Maintenance cost: " + this.MaintenanceCost);
         list.Add("Description: So...you want some of my electricity, do you? Well, for once the rich white man is in control!");
         return list;
+    }
+
+    public void ShowPowerZone(bool b)
+    {
+        transform.parent.Find("powerZone").gameObject.SetActive(b && IsReachable);
     }
 }

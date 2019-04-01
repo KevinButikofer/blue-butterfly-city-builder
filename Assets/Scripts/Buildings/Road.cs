@@ -7,8 +7,10 @@ public class Road : Building
     private float range = 2.1f;
     public  static Vector3 horVect = new Vector3(0.1f, 0.1f, 2.1f);
     public static Vector3 verVect = new Vector3(2.1f, 0.1f, 0.1f);
+    public List<Road> visitedRoads;
     public void Start()
     {
+        visitedRoads = new List<Road>();
         foreach (Collider col in Helper.CheckConnexity4(transform.position, horVect / 1.5f, verVect / 1.5f))
         {
             if (col.transform.parent != null && col.transform.parent.name == "CityCenter")
@@ -27,6 +29,7 @@ public class Road : Building
     }
     public void UpdateReacheable2()
     {
+        visitedRoads = new List<Road>();
         Collider[] cols = Helper.CheckConnexity4(transform.position, horVect / 1.5f, verVect / 1.5f);
         foreach (Collider col in cols)
         {
@@ -34,11 +37,17 @@ public class Road : Building
             if (b is Road)
             {
                 Road r = b as Road;
-                if (!r.IsReachable)
+                
+                if (!r.IsReachable && !visitedRoads.Contains(r))
                 {
+                    visitedRoads.Add(r);
                     r.IsReachable = true;
                     r.UpdateReacheable2();                   
                 }
+            }
+            else if(b is Building)
+            {
+                b.IsReachable = true;
             }
         }
     }

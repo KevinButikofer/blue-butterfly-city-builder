@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MyGameManager : MonoBehaviour
 {
-    private float money = 100000;
+    private float money = 1000000;
     private int population = 0;
     private int power = 0;
     private float populationSatisfaction;
@@ -15,7 +16,14 @@ public class MyGameManager : MonoBehaviour
     [SerializeField]
     private GridManager gridManager;
     readonly WaitForSeconds waitForSeconds = new WaitForSeconds(1f);
-    
+
+    [SerializeField]
+    private List<GameObject> listPrefabCars;
+    [SerializeField]
+    private GameObject prefabCar;
+    private List<GameObject> cars = new List<GameObject>();
+    private float nextSpawnTime;
+
     public int Population { get => population; set => population = value; }
     public int Power { get => power; set => power = value; }
     public float PopulationSatisfaction { get => populationSatisfaction; set => populationSatisfaction = value; }
@@ -23,6 +31,7 @@ public class MyGameManager : MonoBehaviour
     public int JobNumber { get => jobNumber; set => jobNumber = value; }
     public float Money { get => money; set => money = value; }
     public float Taxes { get => taxes; set => taxes = value; }
+    public List<GameObject> Cars { get => cars; set => cars = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -34,8 +43,26 @@ public class MyGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
-       
+        if (gridManager.BuildingCount() > 5)
+        {
+            if (nextSpawnTime < 0 && Population / 2 > Cars.Count)
+            {
+                Building b = Helper.RandomValues(gridManager.GridBuilding).First();
+                if (b != null)
+                {
+                    Random.InitState(System.Environment.TickCount);
+                    int r = Random.Range(0, 5);
+                    GameObject car = GameObject.Instantiate(listPrefabCars[r], b.transform.position, new Quaternion());
+                    car.GetComponent<FindPath>().dest = Helper.RandomValues(gridManager.GridBuilding, b).First();
+                    Cars.Add(car);
+                    nextSpawnTime = Random.Range(0.05f, 0.3f);
+                }
+            }
+            else
+            {
+                nextSpawnTime -= Time.deltaTime;
+            }
+        }
     }
     IEnumerator UpdateGame()
     {
@@ -69,6 +96,6 @@ public class MyGameManager : MonoBehaviour
         {
             Debug.Log("You loose git gud Noob");
         }
-       //Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money);
+       Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money + " Happyness: " + PopulationSatisfaction);
     }
 }

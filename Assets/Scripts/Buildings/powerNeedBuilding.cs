@@ -8,6 +8,6 @@ public class PowerNeedBuilding : Building
     public void CheckPowerAvailability()
     {
         grid = FindObjectOfType<GridManager>();
-        IsPowered = grid.CheckPowerAvailability(transform.position);
+        IsPowered = grid.CheckPowerAvailability(this);
     }
 }

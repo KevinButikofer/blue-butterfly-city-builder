@@ -38,7 +38,12 @@ public class Building : MonoBehaviour
     public int Price { get => price; }
     public int MaintenanceCost { get => maintenanceCost; }
     public bool IsPowered { get => isPowered; set => isPowered = value; }
-    public bool IsReachable { get => isReachable; set => isReachable = value;}
+    public bool IsReachable { get => isReachable; set
+        {
+            isReachable = value;
+        }
+
+    }
     public Vector3Int Size { get => size; set => size = value; }
     public int Idx { get => idx; set => idx = value; }
     public string DisplayName { get => displayName; set => displayName = value; }
