@@ -23,6 +23,8 @@ public class Building : MonoBehaviour
     private Building[] connectedBuidings;
     protected GridManager grid;
 
+    private int idxPrefab;
+
     public Building()
     {
         this.Idx = count;
@@ -32,7 +34,6 @@ public class Building : MonoBehaviour
     {
         grid = FindObjectOfType<GridManager>();
         buildingPlacer = FindObjectOfType<BuildingPlacer>();
-
     }
     public int Power { get => power;}
     public int Price { get => price; }
@@ -42,18 +43,14 @@ public class Building : MonoBehaviour
         {
             isReachable = value;
         }
-
     }
     public Vector3Int Size { get => size; set => size = value; }
     public int Idx { get => idx; set => idx = value; }
     public string DisplayName { get => displayName; set => displayName = value; }
+    public int IdxPrefab { get => idxPrefab; set => idxPrefab = value; }
 
     BuildingPlacer buildingPlacer;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }    
     public void OnMouseDown()
     {
         buildingPlacer.OnBuildingClick(this);

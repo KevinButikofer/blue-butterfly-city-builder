@@ -20,20 +20,14 @@ public class imageBuildingClick : MonoBehaviour, IPointerClickHandler, IPointerE
         canvasDescription.gameObject.SetActive(false);
 
         imageCurrentBuilding.sprite = this.GetComponent<Image>().sprite;
-        buildingPlacer.switchBuilding(buildingIndex);
+        buildingPlacer.SwitchBuilding(buildingIndex);
         
     }
-
-    void Start()
-    {
-
-    }
-
+    
     public void OnPointerEnter(PointerEventData eventData)
     {
         building = buildingPlacer.BuildingPrefabs[buildingIndex].GetComponentInChildren<Building>();
 
-        //Text newText = transform.gameObject.AddComponent<Text>();
         string text = "";
         foreach(string s in building.getBuildingInfo())
         {
@@ -41,9 +35,7 @@ public class imageBuildingClick : MonoBehaviour, IPointerClickHandler, IPointerE
         }
 
         canvasDescription.gameObject.SetActive(true);
-        canvasDescription.gameObject.transform.Find("TextBuildingDescription").GetComponent<Text>().text = text;
-        
-
+        canvasDescription.gameObject.transform.Find("TextBuildingDescription").GetComponent<Text>().text = text;      
 
     }
 

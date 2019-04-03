@@ -9,7 +9,7 @@ public class BuildingPlacer : MonoBehaviour
 {
     readonly WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
     private List<GameObject> buildingPrefabs = new List<GameObject>();
-    private int currentIdx = 0;
+    private int currentPrefabIdx = 0;
     //private List<string> buildingLabels = new List<string>();
     [SerializeField]
     private GameObject buildingsContainer;
@@ -37,13 +37,17 @@ public class BuildingPlacer : MonoBehaviour
     private bool isUsingDestroyTool = false;
     [SerializeField]
     private MyGameManager myGameManager;
+
+    List<TreeInstance> trees;
+    List<TreeInstance> toRemove;
+
     public MyGameManager MyGameManager { get => myGameManager; set => myGameManager = value; }
     public List<GameObject> BuildingPrefabs { get => buildingPrefabs; set => buildingPrefabs = value; }
 
     
 
     private void Start()
-    {
+    {        
         Object[] prefabs = Resources.LoadAll("BuildingPrefabs", typeof(GameObject));
         foreach(Object o in prefabs)
         {
@@ -57,12 +61,32 @@ public class BuildingPlacer : MonoBehaviour
 
         placementZone = Instantiate(placementZonePrefab, new Vector3(0, -1, 0), new Quaternion());
         powerZone = Instantiate(powerZonePrefab, new Vector3(0, -1, 0), new Quaternion());
+        trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
+        TryLoadSave();
+        SwitchBuilding(0);
+
     }
+
+    private void TryLoadSave()
+    {
+        LoadMyGame loadMyGame = new LoadMyGame();
+        if (loadMyGame.Load())
+        {
+            Debug.Log(loadMyGame.indicesPrefabs.Count());
+            for (int i = 0; i < loadMyGame.indicesPrefabs.Count(); i++)
+            {
+                GameObject g = Instantiate(BuildingPrefabs[loadMyGame.indicesPrefabs[i]], buildingsContainer.transform);
+                g.transform.position = loadMyGame.pos[i];
+                InitBuilding(g, loadMyGame.indicesPrefabs[i]);
+            }
+        }
+    }
+
     public void OnMouseDown()
     {
         if (!EventSystem.current.IsPointerOverGameObject() || isUsingDestroyTool)
         {
-            handleMouse();
+            HandleMouse();
         }   
     }
 
@@ -72,12 +96,12 @@ public class BuildingPlacer : MonoBehaviour
         {
             if (curentBuilding is Road || isUsingDestroyTool)
             {
-                handleMouse();
+                HandleMouse();
             }
         }
     }
 
-    void handleMouse()
+    void HandleMouse()
     {
         //Debug.Log("handlemouse, isusingdestroytools: "+isUsingDestroyTool);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -115,8 +139,7 @@ public class BuildingPlacer : MonoBehaviour
     }
     // Update is called once per frame
     void Update()
-    {
-       
+    {       
         //Mouse position
         if (!EventSystem.current.IsPointerOverGameObject())
         {
@@ -163,18 +186,7 @@ public class BuildingPlacer : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                switchBuilding(currentIdx, true);
-            }
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-               
-                /*Building b = Helper.RandomValues(grid.GridBuilding).First();
-                if (b != null)
-                {
-                    GameObject car = GameObject.Instantiate(prefabCar, b.transform.position, new Quaternion());
-                    car.GetComponent<FindPath>().dest = Helper.RandomValues(grid.GridBuilding, b).First();
-                    cars.Add(car);
-                }  */
+                SwitchBuilding(currentPrefabIdx, true);
             }
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -205,7 +217,6 @@ public class BuildingPlacer : MonoBehaviour
     /// <param name="clickPoint"></param>
     public void PlaceNearCube(Vector3 clickPoint)
     {
-
         Building b = curentPrefab.GetComponentInChildren<Building>();
         if (myGameManager.Money - b.Price > 0)
         {
@@ -213,86 +224,84 @@ public class BuildingPlacer : MonoBehaviour
             {
                 GameObject obj = Instantiate(curentPrefab, buildingsContainer.transform);
                 obj.transform.position = finalPosition;
-
-                b = obj.GetComponentInChildren<Building>();
-
-                PowerNeedBuilding powerNeedBuilding = b as PowerNeedBuilding;
-                powerNeedBuilding?.CheckPowerAvailability();
-
-                Road road = b as Road;
-                if (road != null)
-                {
-                    road.UpdateReacheable();
-                }
-                else
-                {
-                    grid.GetStatus(b.Size, b.transform.position,b);
-                }
-
-                if (b is PowerProviderBuilding)
-                {
-                    PowerProviderBuilding powerBuilding = b as PowerProviderBuilding;
-                    powerBuilding.UpdatePower();
-                    grid.PowerProviderBuildings.Add(powerBuilding);
-                    powerBuilding.ShowPowerZone(true);
-                    
-                }
-                
-                grid.AddBuiding(b);
-                List<TreeInstance> trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
-                List<TreeInstance> toRemove = new List<TreeInstance>();
-                foreach (TreeInstance tree in trees)
-                {
-                    Vector3 treePosition = Vector3.Scale(tree.position, Terrain.activeTerrain.terrainData.size);
-                    float treeX = treePosition.x - Terrain.activeTerrain.terrainData.size.x / 2;
-                    float treeZ = treePosition.z - Terrain.activeTerrain.terrainData.size.z / 2;
-
-                    if ( treeX <= b.transform.parent.position.x + b.Size.x/1.8  && treeX >= b.transform.parent.position.x - b.Size.x / 2.2)
-                    {
-                        if(treeZ <= b.transform.parent.position.z + b.Size.z/1.8 && treeZ >= b.transform.parent.position.z - b.Size.z /2.2)
-                        {
-                            Debug.Log("in if");
-                            toRemove.Add(tree);
-                        }
-                        
-
-                    }
-                }
-                foreach (TreeInstance item in toRemove) trees.Remove(item);
-                Terrain.activeTerrain.terrainData.treeInstances = trees.ToArray();
-
-
+                InitBuilding(obj);
             }
         }
     }
 
-    public void switchBuilding(int index, bool isQInput = false)
+    private void InitBuilding(GameObject obj, int prefabIdx=-1)
+    {
+        Building b = obj.GetComponentInChildren<Building>();
+
+        if (prefabIdx == -1)
+            b.IdxPrefab = currentPrefabIdx;
+        else
+            b.IdxPrefab = prefabIdx;
+
+        PowerNeedBuilding powerNeedBuilding = b as PowerNeedBuilding;
+        powerNeedBuilding?.CheckPowerAvailability();
+
+        Road road = b as Road;
+        if (road != null)
+        {
+            road.UpdateReacheable();
+        }
+        else
+        {
+            grid.GetStatus(b.Size, b.transform.position, b);
+        }
+
+        if (b is PowerProviderBuilding)
+        {
+            PowerProviderBuilding powerBuilding = b as PowerProviderBuilding;
+            powerBuilding.UpdatePower();
+            grid.PowerProviderBuildings.Add(powerBuilding);
+            powerBuilding.ShowPowerZone(true);
+
+        }
+
+        grid.AddBuiding(b);
+        if(trees == null)
+            trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
+        toRemove = new List<TreeInstance>();
+        foreach (TreeInstance tree in trees)
+        {
+            Vector3 treePosition = Vector3.Scale(tree.position, Terrain.activeTerrain.terrainData.size);
+            float treeX = treePosition.x - Terrain.activeTerrain.terrainData.size.x / 2;
+            float treeZ = treePosition.z - Terrain.activeTerrain.terrainData.size.z / 2;
+
+            if (treeX <= b.transform.parent.position.x + b.Size.x / 1.8 && treeX >= b.transform.parent.position.x - b.Size.x / 2.2)
+            {
+                if (treeZ <= b.transform.parent.position.z + b.Size.z / 1.8 && treeZ >= b.transform.parent.position.z - b.Size.z / 2.2)
+                {
+                    toRemove.Add(tree);
+                }
+            }
+        }
+        foreach (TreeInstance item in toRemove) trees.Remove(item);
+        Terrain.activeTerrain.terrainData.treeInstances = trees.ToArray();
+    }
+
+    public void SwitchBuilding(int index, bool isQInput = false)
     {
         if (isQInput)
         {
             if (index < BuildingPrefabs.Count - 1)
             {
-                currentIdx++;
+                currentPrefabIdx++;
             }
             else
             {
-                currentIdx = 0;
+                currentPrefabIdx = 0;
             }
         }
         else
         {
-            currentIdx = index;
+            currentPrefabIdx = index;
         }
-
-        /*if (curentPrefab == housePrefab)
-            curentPrefab = roadPrefab;
-        else if (curentPrefab == roadPrefab)
-            curentPrefab = powerPrefab;
-        else
-            curentPrefab = housePrefab;*/
-
-        curentPrefab = BuildingPrefabs[currentIdx];
-        curentBuilding = BuildingPrefabs[currentIdx].GetComponentInChildren<Building>();
+        
+        curentPrefab = BuildingPrefabs[currentPrefabIdx];
+        curentBuilding = BuildingPrefabs[currentPrefabIdx].GetComponentInChildren<Building>();
         if (curentBuilding is PowerProviderBuilding)
         {
             grid.PowerProviderBuildings.ForEach(x => x.ShowPowerZone(true));

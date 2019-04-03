@@ -22,6 +22,8 @@ public class GridManager : MonoBehaviour
         TerrainSize = terrain.GetComponent<Terrain>().terrainData.size;
         terrainCenter = new Vector3(terrain.transform.position.x + TerrainSize.x / 2, 0, terrain.transform.position.z + TerrainSize.z / 2);
     }
+    
+
     /// <summary>
     /// Get the neareast point near of the user click and return is avaiblility 
     /// </summary>

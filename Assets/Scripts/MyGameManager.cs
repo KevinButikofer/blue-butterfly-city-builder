@@ -16,6 +16,8 @@ public class MyGameManager : MonoBehaviour
     [SerializeField]
     private GridManager gridManager;
     readonly WaitForSeconds waitForSeconds = new WaitForSeconds(1f);
+    [SerializeField]
+    private GameObject carContainer;
 
     [SerializeField]
     private List<GameObject> listPrefabCars;
@@ -36,8 +38,21 @@ public class MyGameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        TryLoadSave();
         gridManager = GetComponent<GridManager>();
-        StartCoroutine("UpdateGame");
+        Debug.Log("Data location : " + Application.persistentDataPath);
+        StartCoroutine("UpdateGame");        
+    }
+    private void TryLoadSave()
+    {
+        LoadMyGame loadMyGame = new LoadMyGame();
+        if(loadMyGame.Load())
+        {
+            Money = loadMyGame.money;
+            Population = loadMyGame.population;
+            Taxes = loadMyGame.taxes;
+        }
+
     }
 
     // Update is called once per frame
@@ -52,7 +67,7 @@ public class MyGameManager : MonoBehaviour
                 {
                     Random.InitState(System.Environment.TickCount);
                     int r = Random.Range(0, 5);
-                    GameObject car = GameObject.Instantiate(listPrefabCars[r], b.transform.position, new Quaternion());
+                    GameObject car = GameObject.Instantiate(listPrefabCars[r], b.transform.position, new Quaternion(), carContainer.transform);
                     car.GetComponent<FindPath>().dest = Helper.RandomValues(gridManager.GridBuilding, b).First();
                     Cars.Add(car);
                     nextSpawnTime = Random.Range(0.05f, 0.3f);
@@ -66,7 +81,7 @@ public class MyGameManager : MonoBehaviour
     }
     IEnumerator UpdateGame()
     {
-        while(true)
+        while (true)
         {
             UpdatePopulation();
             yield return waitForSeconds;
@@ -80,22 +95,26 @@ public class MyGameManager : MonoBehaviour
             if (PopulationSatisfaction > 50)
                 population++;
             else
-                population--;
+                population = Mathf.Min(0, population--);
         }
         else
             population = populationCapacity;
     }
     public void UpdateGameVar()
     {
-       gridManager.UpdateGameVar(out int jobs, out int populationNumber, out int money);
-       JobNumber = jobs;
-       populationCapacity = populationNumber;
-       populationSatisfaction =  (jobNumber / Mathf.Max(population, 1) - Taxes * 0.10f) * 100;
-       Money += population * Taxes / 10 + Mathf.Min(JobNumber, population) /10 + money;
-        if(Money < -10000)
+        gridManager.UpdateGameVar(out int jobs, out int populationNumber, out int money);
+        JobNumber = jobs;
+        populationCapacity = populationNumber;
+        populationSatisfaction = (jobNumber / Mathf.Max(population, 1) - Taxes * 0.10f) * 100;
+        Money += population * Taxes / 10 + Mathf.Min(JobNumber, population) / 10 + money;
+        if (Money < -10000)
         {
             Debug.Log("You loose git gud Noob");
         }
-       Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money + " Happyness: " + PopulationSatisfaction);
+        Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money + " Happyness: " + PopulationSatisfaction);
+    }
+    void OnApplicationQuit()
+    {
+        SaveMyGame s = new SaveMyGame(money, population, taxes, gridManager.GridBuilding);       
     }
 }
