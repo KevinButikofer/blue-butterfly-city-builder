@@ -64,13 +64,14 @@ public class BuildingPlacer : MonoBehaviour
         trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
         TryLoadSave();
         SwitchBuilding(0);
+        
 
     }
 
     private void TryLoadSave()
     {
-        LoadMyGame loadMyGame = new LoadMyGame();
-        if (loadMyGame.Load())
+        LoadMyGame loadMyGame = FindObjectOfType<LoadMyGame>();
+        if (loadMyGame!=null && loadMyGame.isSaveLoad)
         {
             Debug.Log(loadMyGame.indicesPrefabs.Count());
             for (int i = 0; i < loadMyGame.indicesPrefabs.Count(); i++)
@@ -84,7 +85,7 @@ public class BuildingPlacer : MonoBehaviour
 
     public void OnMouseDown()
     {
-        if (!EventSystem.current.IsPointerOverGameObject() || isUsingDestroyTool)
+        if ((!EventSystem.current.IsPointerOverGameObject() || isUsingDestroyTool) && !myGameManager.isGamePaused)
         {
             HandleMouse();
         }   
@@ -92,7 +93,7 @@ public class BuildingPlacer : MonoBehaviour
 
     public void OnMouseDrag()
     {
-        if (!EventSystem.current.IsPointerOverGameObject() || isUsingDestroyTool)
+        if ((!EventSystem.current.IsPointerOverGameObject() || isUsingDestroyTool) && !myGameManager.isGamePaused)
         {
             if (curentBuilding is Road || isUsingDestroyTool)
             {
@@ -141,7 +142,7 @@ public class BuildingPlacer : MonoBehaviour
     void Update()
     {       
         //Mouse position
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject() && !myGameManager.isGamePaused)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo))

@@ -8,7 +8,6 @@ public class SaveMyGame
 {
     public SaveMyGame(float money, int population, float taxes, Dictionary<int, Building> gridBuildings)
     {
-        Debug.Log("Save");
         SaveGame.SavePath = SaveGamePath.PersistentDataPath;
         SaveGame.Save<float>("money", money);
         SaveGame.Save<int>("population", population);

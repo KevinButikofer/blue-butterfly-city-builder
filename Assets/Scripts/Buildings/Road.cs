@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Road : Building
 {
-    private float range = 2.1f;
-    public  static Vector3 horVect = new Vector3(0.1f, 0.1f, 2.1f);
-    public static Vector3 verVect = new Vector3(2.1f, 0.1f, 0.1f);
+    private static readonly float range = 2.1f;
+    public static Vector3 horVect;
+    public static Vector3 verVect;
     public List<Road> visitedRoads;
     public void Start()
     {
+        horVect = new Vector3(0.1f, 0.1f, range);
+        verVect = new Vector3(range, 0.1f, 0.1f);
         visitedRoads = new List<Road>();
         foreach (Collider col in Helper.CheckConnexity4(transform.position, horVect / 1.5f, verVect / 1.5f))
         {

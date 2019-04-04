@@ -18,6 +18,8 @@ public class MyGameManager : MonoBehaviour
     readonly WaitForSeconds waitForSeconds = new WaitForSeconds(1f);
     [SerializeField]
     private GameObject carContainer;
+    [SerializeField]
+    private GameObject pauseCanvas;
 
     [SerializeField]
     private List<GameObject> listPrefabCars;
@@ -25,6 +27,8 @@ public class MyGameManager : MonoBehaviour
     private GameObject prefabCar;
     private List<GameObject> cars = new List<GameObject>();
     private float nextSpawnTime;
+
+    public bool isGamePaused = false;
 
     public int Population { get => population; set => population = value; }
     public int Power { get => power; set => power = value; }
@@ -37,46 +41,54 @@ public class MyGameManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {        
         TryLoadSave();
         gridManager = GetComponent<GridManager>();
         Debug.Log("Data location : " + Application.persistentDataPath);
-        StartCoroutine("UpdateGame");        
+        StartCoroutine("UpdateGame");
+        pauseCanvas.SetActive(false);
     }
     private void TryLoadSave()
     {
-        LoadMyGame loadMyGame = new LoadMyGame();
-        if(loadMyGame.Load())
+        LoadMyGame l = FindObjectOfType<LoadMyGame>();
+        if(l != null && l.isSaveLoad)
         {
-            Money = loadMyGame.money;
-            Population = loadMyGame.population;
-            Taxes = loadMyGame.taxes;
+            Money = l.money;
+            Population = l.population;
+            Taxes = l.taxes;
         }
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gridManager.BuildingCount() > 5)
-        {
-            if (nextSpawnTime < 0 && Population / 2 > Cars.Count)
+        if (!isGamePaused)
+        { 
+            if (gridManager.BuildingCount() > 5)
             {
-                Building b = Helper.RandomValues(gridManager.GridBuilding).First();
-                if (b != null)
+                if (nextSpawnTime < 0 && Population / 2 > Cars.Count)
                 {
-                    Random.InitState(System.Environment.TickCount);
-                    int r = Random.Range(0, 5);
-                    GameObject car = GameObject.Instantiate(listPrefabCars[r], b.transform.position, new Quaternion(), carContainer.transform);
-                    car.GetComponent<FindPath>().dest = Helper.RandomValues(gridManager.GridBuilding, b).First();
-                    Cars.Add(car);
-                    nextSpawnTime = Random.Range(0.05f, 0.3f);
+                    Building b = Helper.RandomValues(gridManager.GridBuilding).First();
+                    if (b != null)
+                    {
+                        Random.InitState(System.Environment.TickCount);
+                        int r = Random.Range(0, 5);
+                        GameObject car = GameObject.Instantiate(listPrefabCars[r], b.transform.position, new Quaternion(), carContainer.transform);
+                        car.GetComponent<FindPath>().dest = Helper.RandomValues(gridManager.GridBuilding, b).First();
+                        Cars.Add(car);
+                        nextSpawnTime = Random.Range(0.05f, 0.3f);
+                    }
+                }
+                else
+                {
+                    nextSpawnTime -= Time.deltaTime;
                 }
             }
-            else
-            {
-                nextSpawnTime -= Time.deltaTime;
-            }
+        }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            pauseCanvas.SetActive(!pauseCanvas.activeSelf);
+            isGamePaused = pauseCanvas.activeSelf;
         }
     }
     IEnumerator UpdateGame()
@@ -113,7 +125,7 @@ public class MyGameManager : MonoBehaviour
         }
         Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money + " Happyness: " + PopulationSatisfaction);
     }
-    void OnApplicationQuit()
+    public void SaveGame()
     {
         SaveMyGame s = new SaveMyGame(money, population, taxes, gridManager.GridBuilding);       
     }
