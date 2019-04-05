@@ -121,10 +121,9 @@ public class CameraController : MonoBehaviour
         }
         else // Déplacement
         {
-
             pos.x = Mathf.Clamp(pos.x, -panLimit.x + originalPos.x, panLimit.x + originalPos.x);
             pos.y = Mathf.Clamp(pos.y, minY, maxY);
-            pos.z = Mathf.Clamp(pos.z, -panLimit.y*3 + originalPos.z, panLimit.y + originalPos.z);
+            pos.z = Mathf.Clamp(pos.z, -panLimit.y + originalPos.z, panLimit.y + originalPos.z);
 
             transform.localRotation = Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y + rot, transform.localEulerAngles.z);
             transform.position = pos;
