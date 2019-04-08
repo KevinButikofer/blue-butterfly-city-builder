@@ -44,7 +44,6 @@ public class MyGameManager : MonoBehaviour
     {        
         TryLoadSave();
         gridManager = GetComponent<GridManager>();
-        Debug.Log("Data location : " + Application.persistentDataPath);
         StartCoroutine("UpdateGame");
         pauseCanvas.SetActive(false);
         isGamePaused = false;
@@ -69,7 +68,7 @@ public class MyGameManager : MonoBehaviour
     {
         if (!isGamePaused)
         { 
-            if (gridManager.BuildingCount() > 5)
+            if (gridManager.BuildingExceptRoadCount() > 5)
             {
                 if (nextSpawnTime < 0 && Population / 2 > Cars.Count)
                 {
@@ -117,6 +116,9 @@ public class MyGameManager : MonoBehaviour
         else
             population = populationCapacity;
     }
+    /// <summary>
+    /// Update game var
+    /// </summary>
     public void UpdateGameVar()
     {
         gridManager.UpdateGameVar(out int jobs, out int populationNumber, out int money);
@@ -130,6 +132,9 @@ public class MyGameManager : MonoBehaviour
         }
         Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money + " Happyness: " + PopulationSatisfaction);
     }
+    /// <summary>
+    /// Save current game state
+    /// </summary>
     public void SaveGame()
     {
         SaveMyGame s = new SaveMyGame(money, population, taxes, gridManager.GridBuilding);       

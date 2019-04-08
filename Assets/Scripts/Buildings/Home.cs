@@ -9,7 +9,7 @@ public class Home : PowerNeedBuilding
 
     public int ResidentCapacity { get => residentCapacity; }
 
-    override public List<string> getBuildingInfo()
+    override public List<string> GetBuildingInfo()
     {
         List<string> list = new List<string>();
         list.Add("Building: " + this.DisplayName);

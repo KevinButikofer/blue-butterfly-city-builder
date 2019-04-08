@@ -146,6 +146,12 @@ public class GridManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Update the game variable
+    /// </summary>
+    /// <param name="nbJobs">out total number of job</param>
+    /// <param name="habitantCapacity">out total number of rensident capacity</param>
+    /// <param name="money">out money win or loose</param>
     public void UpdateGameVar(out int nbJobs, out int habitantCapacity, out int money)
     {
         nbJobs = 0;
@@ -167,7 +173,12 @@ public class GridManager : MonoBehaviour
             money -= item.Value.MaintenanceCost;
         }
     }
-    public int BuildingCount()
+
+    /// <summary>
+    /// return number of building that aren't road
+    /// </summary>
+    /// <returns></returns>
+    public int BuildingExceptRoadCount()
     {
         return gridBuilding.Where(x => !(x.Value is Road)).Count();
     }

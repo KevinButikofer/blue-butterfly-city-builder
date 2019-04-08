@@ -53,7 +53,7 @@ public class PowerProviderBuilding : Building
         return false;
     }
 
-    override public List<string> getBuildingInfo()
+    override public List<string> GetBuildingInfo()
     {
         List<string> list = new List<string>();
         list.Add("Building: " + this.DisplayName);

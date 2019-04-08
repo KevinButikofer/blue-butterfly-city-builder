@@ -65,6 +65,7 @@ public class BuildingPlacer : MonoBehaviour
         trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
         TryLoadSave();
         SwitchBuilding(0);       
+
     }
 
     private void TryLoadSave()
@@ -117,6 +118,10 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// Destroy building if using destoy tools
+    /// </summary>
+    /// <param name="b"> clicked building</param>
     public void OnBuildingClick(Building b)
     {
         if (isUsingDestroyTool)
@@ -129,7 +134,7 @@ public class BuildingPlacer : MonoBehaviour
         {
             GameObject.Destroy(b.transform.parent.gameObject);
             grid.ResetReacheabillity();
-            cityCenter.UpdateReacheability(b as Road);
+            cityCenter.UpdateReachability(b as Road);
         }
         else
         {
@@ -146,14 +151,18 @@ public class BuildingPlacer : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
+                //Click on empty space with building tool
                 if (hitInfo.transform.tag == "terrain" && !isUsingDestroyTool)
                 {
                     placementZone.SetActive(true);
                     placementZone.transform.localScale = new Vector3(curentBuilding.Size.x, 0.2f, curentBuilding.Size.z);
 
+                    //Get the grid position
                     if (grid.GetNearestPointOnGrid(hitInfo.point, curentBuilding.Size, out Vector3 resultPos))
                     {
                         placementZone.GetComponent<Renderer>().material.color = correctPlacementColor;
+
+                        //if building provide energy we show the range
                         PowerProviderBuilding building = curentBuilding.GetComponent<PowerProviderBuilding>();
                         if (building != null)
                         {
@@ -202,7 +211,6 @@ public class BuildingPlacer : MonoBehaviour
                 }
             }
         }
-
         else
         {
             placementZone.SetActive(false);
@@ -233,6 +241,7 @@ public class BuildingPlacer : MonoBehaviour
     {
         Building b = obj.GetComponentInChildren<Building>();
 
+        //use when loading save
         if (prefabIdx == -1)
             b.IdxPrefab = currentPrefabIdx;
         else
@@ -244,7 +253,7 @@ public class BuildingPlacer : MonoBehaviour
         Road road = b as Road;
         if (road != null)
         {
-            road.UpdateReacheable();
+            road.UpdateReachable();
         }
         else
         {
@@ -257,10 +266,11 @@ public class BuildingPlacer : MonoBehaviour
             powerBuilding.UpdatePower();
             grid.PowerProviderBuildings.Add(powerBuilding);
             powerBuilding.ShowPowerZone(true);
-
         }
 
         grid.AddBuiding(b);
+
+        //Remove tree where the building placed
         if(trees == null)
             trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
         toRemove = new List<TreeInstance>();
@@ -279,9 +289,17 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
         foreach (TreeInstance item in toRemove) trees.Remove(item);
+
+        //update terrain trees
         Terrain.activeTerrain.terrainData.treeInstances = trees.ToArray();
     }
 
+
+    /// <summary>
+    /// Change the current building to place
+    /// </summary>
+    /// <param name="index">index of the building in the list</param>
+    /// <param name="isQInput"> if building switch with the q key</param>
     public void SwitchBuilding(int index, bool isQInput = false)
     {
         if (isQInput)

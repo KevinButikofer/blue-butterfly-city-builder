@@ -7,6 +7,7 @@ public class CityCenter : MonoBehaviour
     private readonly float size = 4;
     private Vector3 hor, ver;
     public List<List<Road>> roadsList;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,8 +15,8 @@ public class CityCenter : MonoBehaviour
         ver = new Vector3(0.1f, 0.1f, size);
     }
 
-    // Update is called once per frame
-    public void UpdateReacheability(Road objectToIgnore)
+    // Update reachability of all building
+    public void UpdateReachability(Road objectToIgnore)
     {
         roadsList = new List<List<Road>>();
         foreach (Collider c in Helper.CheckConnexity4(transform.position, hor, ver))
@@ -42,8 +43,8 @@ public class CityCenter : MonoBehaviour
         {
             foreach(Road road in r)
             {
-                road.UpdateReacheable2();
-                road.UpdateReacheable();
+                road.UpdateReachability2();
+                road.UpdateReachable();
             }
         }
     }

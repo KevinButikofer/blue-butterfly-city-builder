@@ -60,7 +60,11 @@ public class Building : MonoBehaviour
         buildingPlacer.OnBuildingClick(this);
     }
 
-    public virtual List<string> getBuildingInfo()
+    /// <summary>
+    /// Text display in Ui
+    /// </summary>
+    /// <returns>String with all building Info</returns>
+    public virtual List<string> GetBuildingInfo()
     {
         return null;
     }

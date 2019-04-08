@@ -33,7 +33,6 @@ public class CameraController : MonoBehaviour
     }
     void Update()
     {
-        RaycastHit hit;
         Ray ray = this.transform.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
         Vector3 pos = transform.position;
         float y = pos.y;
@@ -106,7 +105,7 @@ public class CameraController : MonoBehaviour
 
             Vector3 desiredPosition;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 desiredPosition = hit.point;
             }

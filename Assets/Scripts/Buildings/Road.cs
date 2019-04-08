@@ -13,6 +13,8 @@ public class Road : Building
         horVect = new Vector3(0.1f, 0.1f, range);
         verVect = new Vector3(range, 0.1f, 0.1f);
         visitedRoads = new List<Road>();
+
+        //check Reacheability
         foreach (Collider col in Helper.CheckConnexity4(transform.position, horVect / 1.5f, verVect / 1.5f))
         {
             if (col.transform.parent != null && col.transform.parent.name == "CityCenter")
@@ -26,10 +28,13 @@ public class Road : Building
         }
         if(IsReachable)
         {
-            UpdateReacheable2();
+            UpdateReachability2();
         }
     }
-    public void UpdateReacheable2()
+    /// <summary>
+    /// Update reachability of all buildind/road
+    /// </summary>
+    public void UpdateReachability2()
     {
         visitedRoads = new List<Road>();
         Collider[] cols = Helper.CheckConnexity4(transform.position, horVect / 1.5f, verVect / 1.5f);
@@ -44,7 +49,7 @@ public class Road : Building
                 {
                     visitedRoads.Add(r);
                     r.IsReachable = true;
-                    r.UpdateReacheable2();                   
+                    r.UpdateReachability2();                   
                 }
             }
             else if(b is Building)
@@ -53,7 +58,10 @@ public class Road : Building
             }
         }
     }
-    public void UpdateReacheable()
+    /// <summary>
+    /// Update reachability of touched buiding
+    /// </summary>
+    public void UpdateReachable()
     {
         if (IsReachable)
         {
@@ -67,13 +75,13 @@ public class Road : Building
                     {
                         b.IsReachable = true;
                     }
-                }
-               
+                }                              
             }
         }
     }
 
-    override public List<string> getBuildingInfo()
+
+    override public List<string> GetBuildingInfo()
     {
         List<string> list = new List<string>();
         list.Add("Building: " + this.DisplayName);

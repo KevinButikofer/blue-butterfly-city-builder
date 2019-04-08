@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class imageBuildingClick : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class ImageBuildingClick : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
     public Canvas canvasBuildings;
@@ -29,7 +29,7 @@ public class imageBuildingClick : MonoBehaviour, IPointerClickHandler, IPointerE
         building = buildingPlacer.BuildingPrefabs[buildingIndex].GetComponentInChildren<Building>();
 
         string text = "";
-        foreach(string s in building.getBuildingInfo())
+        foreach(string s in building.GetBuildingInfo())
         {
             text += s  + "\n";
         }
