@@ -48,6 +48,7 @@ public class BuildingPlacer : MonoBehaviour
 
     private void Start()
     {        
+        //Load all building prefab in ressource
         Object[] prefabs = Resources.LoadAll("BuildingPrefabs", typeof(GameObject));
         foreach(Object o in prefabs)
         {
@@ -63,9 +64,7 @@ public class BuildingPlacer : MonoBehaviour
         powerZone = Instantiate(powerZonePrefab, new Vector3(0, -1, 0), new Quaternion());
         trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
         TryLoadSave();
-        SwitchBuilding(0);
-        
-
+        SwitchBuilding(0);       
     }
 
     private void TryLoadSave()

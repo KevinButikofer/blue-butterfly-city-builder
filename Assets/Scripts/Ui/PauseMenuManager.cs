@@ -17,10 +17,12 @@ public class PauseMenuManager : MonoBehaviour
     // Start is called before the first frame update
     private void OnEnable()
     {
+        //Pause game
         Time.timeScale = 0;
     }
     private void OnDisable()
     {
+        //Resume game
         gameCanvas.SetActive(true);
         Time.timeScale = 1;
     }

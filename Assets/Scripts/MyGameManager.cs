@@ -47,6 +47,11 @@ public class MyGameManager : MonoBehaviour
         Debug.Log("Data location : " + Application.persistentDataPath);
         StartCoroutine("UpdateGame");
         pauseCanvas.SetActive(false);
+        isGamePaused = false;
+    }
+    private void Awake()
+    {
+        isGamePaused = false;
     }
     private void TryLoadSave()
     {

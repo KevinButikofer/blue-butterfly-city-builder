@@ -22,13 +22,14 @@ public class MainMenuUManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {        
+        //If no save we disable btnLoad
         if(!load.Load())
-            btnLoad.interactable = false;
-        
+            btnLoad.interactable = false;        
     }
 
     public void Load()
     {
+        //Load Game with the save
         if(load != null)
         {
             SceneManager.LoadScene(1, LoadSceneMode.Single);
