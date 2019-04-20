@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class FindPath : MonoBehaviour
 {
-    public int moveSpeed=5;
+    public static int moveSpeed=5;
     public Building dest;
     public List<Road> tryRoads;
     public List<Road> roads;
-    readonly WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
-    private MyGameManager myGameManager;
+    readonly static WaitForSeconds waitForSeconds = new WaitForSeconds(0.01f);
+    private static MyGameManager myGameManager;
     // Start is called before the first frame update
     void Start()
     {
-        myGameManager = FindObjectOfType<MyGameManager>();
+        if(myGameManager == null)
+            myGameManager = FindObjectOfType<MyGameManager>();
         FindRoadPath();
         StartCoroutine(FollowPath());
     }
@@ -89,7 +90,7 @@ public class FindPath : MonoBehaviour
             transform.position = nextPos;
             startPos = transform.position;            
         }
-        myGameManager.Cars.Remove(gameObject);
+        myGameManager.Cars.Remove(gameObject);        
         Destroy(gameObject);
     }
 }
