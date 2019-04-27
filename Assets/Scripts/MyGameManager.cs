@@ -93,6 +93,7 @@ public class MyGameManager : MonoBehaviour
         {
             pauseCanvas.SetActive(!pauseCanvas.activeSelf);
             isGamePaused = pauseCanvas.activeSelf;
+            print(isGamePaused);
         }
     }
     IEnumerator UpdateGame()

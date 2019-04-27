@@ -124,7 +124,7 @@ public class BuildingPlacer : MonoBehaviour
     /// <param name="b"> clicked building</param>
     public void OnBuildingClick(Building b)
     {
-        if (isUsingDestroyTool)
+        if (isUsingDestroyTool && !myGameManager.isGamePaused)
             DestroyClickedBuiding(b);
     }
     private void DestroyClickedBuiding(Building b)
@@ -207,6 +207,7 @@ public class BuildingPlacer : MonoBehaviour
                 else
                 {
                     isUsingDestroyTool = true;
+                    grid.PowerProviderBuildings.ForEach(x => x.ShowPowerZone(false));
                     Cursor.SetCursor(bulldozerCursor, hotSpot, CursorMode.Auto);
                 }
             }
@@ -320,7 +321,7 @@ public class BuildingPlacer : MonoBehaviour
         
         curentPrefab = BuildingPrefabs[currentPrefabIdx];
         curentBuilding = BuildingPrefabs[currentPrefabIdx].GetComponentInChildren<Building>();
-        if (curentBuilding is PowerProviderBuilding)
+        if (curentBuilding is PowerProviderBuilding && !isUsingDestroyTool)
         {
             grid.PowerProviderBuildings.ForEach(x => x.ShowPowerZone(true));
         }    
