@@ -130,7 +130,7 @@ public class MyGameManager : MonoBehaviour
         {
             Debug.Log("You loose git gud Noob");
         }
-        Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money + " Happyness: " + PopulationSatisfaction);
+       // Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money + " Happyness: " + PopulationSatisfaction);
     }
     /// <summary>
     /// Save current game state

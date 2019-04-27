@@ -15,7 +15,6 @@ public class WorkPlace : PowerNeedBuilding
         list.Add("Building: " + this.DisplayName);
         list.Add("Price: " + this.Price);
         list.Add("Worker capacity: " + this.workerCapacity);
-        list.Add("Power consumption: " + this.Power);
         list.Add("Maintenance cost: " + this.MaintenanceCost);
         list.Add("Description: A place where you can work to your heart content for your obviously wonderful and not boring job");
         return list;

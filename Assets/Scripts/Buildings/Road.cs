@@ -36,6 +36,7 @@ public class Road : Building
     /// </summary>
     public void UpdateReachability2()
     {
+        Debug.Log("test");
         visitedRoads = new List<Road>();
         Collider[] cols = Helper.CheckConnexity4(transform.position, horVect / 1.5f, verVect / 1.5f);
         foreach (Collider col in cols)
@@ -63,6 +64,7 @@ public class Road : Building
     /// </summary>
     public void UpdateReachable()
     {
+        Debug.Log("test2");
         if (IsReachable)
         {
             Collider[] cols = Helper.CheckConnexity4(transform.position, horVect / 1.5f, verVect / 1.5f);
@@ -86,7 +88,6 @@ public class Road : Building
         List<string> list = new List<string>();
         list.Add("Building: " + this.DisplayName);
         list.Add("Price: " + this.Price);
-        list.Add("Power consumption: " + this.Power);
         list.Add("Maintenance cost: " + this.MaintenanceCost);
         list.Add("Description: This is a road dude, what are you expecting?");
         return list;

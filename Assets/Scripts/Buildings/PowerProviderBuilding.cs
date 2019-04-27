@@ -6,10 +6,8 @@ public class PowerProviderBuilding : Building
 {
     [SerializeField]
     private int powerRange = 1;
-    private int remainingPower;
     
     public int PowerRange { get => powerRange; set => powerRange = value; }
-    public int RemainingPower { get => remainingPower; set => remainingPower = value; }
 
     [SerializeField]
     private int workerCapacity;
@@ -59,7 +57,6 @@ public class PowerProviderBuilding : Building
         list.Add("Building: " + this.DisplayName);
         list.Add("Price: " + this.Price);
         list.Add("Worker capacity: " + this.workerCapacity);
-        list.Add("Power consumption: " + this.Power);
         list.Add("Maintenance cost: " + this.MaintenanceCost);
         list.Add("Description: So...you want some of my electricity, do you? Well, for once the rich white man is in control!");
         return list;

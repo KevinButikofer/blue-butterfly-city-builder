@@ -75,20 +75,25 @@ public class FindPath : MonoBehaviour
         Vector3 startPos = transform.position;
         foreach (Road r in roads)
         {
-            Vector3 dest = r.transform.position - transform.position;
-            if (dest != Vector3.zero)
-                transform.rotation = Quaternion.LookRotation(dest);
-            nextPos = r.transform.position;
-            float t = 0;
-            float step = (moveSpeed / (startPos - nextPos).magnitude) * Time.fixedDeltaTime;
-            while (t <= 1.0f)
+            if (r == null)
+                break;
+            else
             {
-                t += step; // Goes from 0 to 1, incrementing by step each time           
-                transform.position = Vector3.Lerp(startPos, nextPos, t); // Move objectToMove closer to b
-                yield return waitForSeconds;         // Leave the routine and return here in the next frame            
+                Vector3 dest = r.transform.position - transform.position;
+                if (dest != Vector3.zero)
+                    transform.rotation = Quaternion.LookRotation(dest);
+                nextPos = r.transform.position;
+                float t = 0;
+                float step = (moveSpeed / (startPos - nextPos).magnitude) * Time.fixedDeltaTime;
+                while (t <= 1.0f)
+                {
+                    t += step; // Goes from 0 to 1, incrementing by step each time           
+                    transform.position = Vector3.Lerp(startPos, nextPos, t); // Move objectToMove closer to b
+                    yield return waitForSeconds;         // Leave the routine and return here in the next frame            
+                }
+                transform.position = nextPos;
+                startPos = transform.position;
             }
-            transform.position = nextPos;
-            startPos = transform.position;            
         }
         myGameManager.Cars.Remove(gameObject);        
         Destroy(gameObject);

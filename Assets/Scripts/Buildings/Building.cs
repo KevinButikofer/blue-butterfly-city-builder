@@ -7,8 +7,6 @@ public class Building : MonoBehaviour
     [SerializeField]
     private string displayName;
     [SerializeField]
-    private int power;
-    [SerializeField]
     private int price;
     [SerializeField]
     private int maintenanceCost;
@@ -35,7 +33,6 @@ public class Building : MonoBehaviour
         grid = FindObjectOfType<GridManager>();
         buildingPlacer = FindObjectOfType<BuildingPlacer>();
     }
-    public int Power { get => power;}
     public int Price { get => price; }
     public int MaintenanceCost { get => maintenanceCost; }
     public bool IsPowered { get => isPowered; set => isPowered = value; }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CityCenter : MonoBehaviour
 {
-    private readonly float size = 4;
+    private readonly float size = 8;
     private Vector3 hor, ver;
     public List<List<Road>> roadsList;
 
@@ -27,7 +27,7 @@ public class CityCenter : MonoBehaviour
             {
                 Road r = b as Road;
                 roads.Add(r);
-                foreach (Collider col in Helper.CheckConnexity4(r.transform.position, Road.horVect / 1.5f, Road.verVect / 1.5f))
+                foreach (Collider col in Helper.CheckConnexity4(r.transform.position, Road.horVect / 1f, Road.verVect / 1f))
                 {
                     Building b2 = col.gameObject.GetComponent<Building>();
                     if (b2 is Road && !roads.Contains(b2 as Road) && !(b2 as Road).Equals(objectToIgnore))

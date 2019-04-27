@@ -137,9 +137,8 @@ public class GridManager : MonoBehaviour
     {
         foreach(PowerProviderBuilding powerProvider in PowerProviderBuildings)
         {
-            if(powerProvider.IsInRange(b.transform.position) && powerProvider.RemainingPower > -1*b.Power)
+            if(powerProvider.IsInRange(b.transform.position))
             {
-                powerProvider.RemainingPower += b.Power;
                 return true;
             }
         }
