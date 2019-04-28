@@ -16,7 +16,7 @@ public class CityCenter : MonoBehaviour
     }
 
     // Update reachability of all building
-    public void UpdateReachability(Road objectToIgnore)
+    public void UpdateReachability(Road objectToIgnore=null)
     {
         roadsList = new List<List<Road>>();
         foreach (Collider c in Helper.CheckConnexity4(transform.position, hor, ver))

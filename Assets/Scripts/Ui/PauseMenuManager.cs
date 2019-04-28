@@ -23,7 +23,7 @@ public class PauseMenuManager : MonoBehaviour
     private void OnDisable()
     {
         //Resume game
-        gameCanvas.SetActive(true);
+        //gameCanvas.SetActive(true);
         Time.timeScale = 1;
     }
     public void Save()
@@ -41,7 +41,8 @@ public class PauseMenuManager : MonoBehaviour
     }
     public void ReturnToGame()
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        myGameManager.PauseGame();
     }
     public void QuitGame()
     {

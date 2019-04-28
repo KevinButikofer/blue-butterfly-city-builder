@@ -29,11 +29,8 @@ public class LoadMyGame : MonoBehaviour
                 taxes = SaveGame.Load<float>("taxes");
 
                 indices = SaveGame.Load<int[]>("ids");
-                Debug.Log(indices.Count());
                 indicesPrefabs = SaveGame.Load<int[]>("indexPrefabs");
-                Debug.Log(indicesPrefabs.Count());
                 pos = SaveGame.Load<Vector3[]>("pos");
-                Debug.Log(pos.Count());
                 return true;
             }
             return false;

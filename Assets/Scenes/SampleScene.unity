@@ -8993,6 +8993,7 @@ MonoBehaviour:
   gridManager: {fileID: 989047177}
   carContainer: {fileID: 71858999}
   pauseCanvas: {fileID: 195191317}
+  UiCanvas: {fileID: 40628848}
   listPrefabCars:
   - {fileID: 6795334467006089777, guid: 0d5ff8218d648fb468d32a7240021763, type: 3}
   - {fileID: 728068263346666306, guid: e2877461f29ca2f4d91021b2520e54dd, type: 3}

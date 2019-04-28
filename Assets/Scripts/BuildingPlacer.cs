@@ -53,8 +53,6 @@ public class BuildingPlacer : MonoBehaviour
         foreach(Object o in prefabs)
         {
             GameObject b = o as GameObject;
-            Building g = b.GetComponentInChildren<Building>();
-            print(g.Size);
             BuildingPrefabs.Add(b);
         }
 
@@ -82,6 +80,8 @@ public class BuildingPlacer : MonoBehaviour
                 g.transform.position = loadMyGame.pos[i];
                 InitBuilding(g, loadMyGame.indicesPrefabs[i]);
             }
+            grid.PowerProviderBuildings.ForEach(x => x.UpdatePower());
+            cityCenter.UpdateReachability();
         }
     }
 

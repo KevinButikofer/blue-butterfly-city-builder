@@ -22,6 +22,8 @@ public class MyGameManager : MonoBehaviour
     private GameObject carContainer;
     [SerializeField]
     private GameObject pauseCanvas;
+    [SerializeField]
+    private GameObject UiCanvas;
 
     [SerializeField]
     private List<GameObject> listPrefabCars;
@@ -82,7 +84,6 @@ public class MyGameManager : MonoBehaviour
             Population = l.population;
             Taxes = l.taxes;
             UpdateGameUI();
-
         }
     }
 
@@ -121,12 +122,12 @@ public class MyGameManager : MonoBehaviour
     {
         while (true)
         {
-            UpdatePopulation();
+            UpdateGameOneSec();
             UpdateGameUI();
             yield return waitForSeconds;
         }
     }
-    public void UpdatePopulation()
+    public void UpdateGameOneSec()
     {
         UpdateGameVar();
         if (populationCapacity > population)
@@ -142,7 +143,7 @@ public class MyGameManager : MonoBehaviour
                 isPopulationGrowing = false;
             }
         }
-        else
+        else if(populationCapacity != 0)
             population = populationCapacity;
     }
     /// <summary>
@@ -222,9 +223,9 @@ public class MyGameManager : MonoBehaviour
 
     public void PauseGame()
     {
+        UiCanvas.SetActive(pauseCanvas.activeSelf);
         pauseCanvas.SetActive(!pauseCanvas.activeSelf);
         isGamePaused = pauseCanvas.activeSelf;
-        print(isGamePaused);
     }
 
     public void increaseTaxes()
