@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
+
 
 public class MyGameManager : MonoBehaviour
 {
@@ -39,6 +41,25 @@ public class MyGameManager : MonoBehaviour
     public float Taxes { get => taxes; set => taxes = value; }
     public List<GameObject> Cars { get => cars; set => cars = value; }
 
+    public Text textTaxes;
+    public Image imageMoneyDetails;
+    public Image imagePopulationDetails;
+    public Text textMoneyDetails;
+    public Text textPopulationDetails;
+    public Text textHappinessDetails;
+    public Text textMoney;
+    public Text textPopulation;
+    public Text textHappiness;
+    public Image imageMoney;
+    public Image imagePopulation;
+    public Sprite upArrow;
+    public Sprite downArrow;
+    private bool isPopulationGrowing;
+    private bool isWinningMoney;
+    private Color colorGreen = new Color32(0, 224, 68, 255);
+    private Color colorRed = new Color32(255, 0, 0, 255);
+
+
     // Start is called before the first frame update
     void Start()
     {        
@@ -60,6 +81,8 @@ public class MyGameManager : MonoBehaviour
             Money = l.money;
             Population = l.population;
             Taxes = l.taxes;
+            UpdateGameUI();
+
         }
     }
 
@@ -91,9 +114,7 @@ public class MyGameManager : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            pauseCanvas.SetActive(!pauseCanvas.activeSelf);
-            isGamePaused = pauseCanvas.activeSelf;
-            print(isGamePaused);
+            PauseGame();          
         }
     }
     IEnumerator UpdateGame()
@@ -101,6 +122,7 @@ public class MyGameManager : MonoBehaviour
         while (true)
         {
             UpdatePopulation();
+            UpdateGameUI();
             yield return waitForSeconds;
         }
     }
@@ -110,9 +132,15 @@ public class MyGameManager : MonoBehaviour
         if (populationCapacity > population)
         {
             if (PopulationSatisfaction > 50)
+            {
                 population++;
+                isPopulationGrowing = true;
+            }               
             else
+            {
                 population = Mathf.Min(0, population--);
+                isPopulationGrowing = false;
+            }
         }
         else
             population = populationCapacity;
@@ -126,11 +154,19 @@ public class MyGameManager : MonoBehaviour
         JobNumber = jobs;
         populationCapacity = populationNumber;
         populationSatisfaction = (jobNumber / Mathf.Max(population, 1) - Taxes * 0.10f) * 100;
-        Money += population * Taxes / 10 + Mathf.Min(JobNumber, population) / 10 + money;
+        float moneyWin = population * Taxes / 10 + Mathf.Min(JobNumber, population) / 10 + money;
+        Money += moneyWin;
+        if (moneyWin > 0)
+            isWinningMoney = true;
+        else
+            isWinningMoney = false;
+
         if (Money < -10000)
         {
             Debug.Log("You loose git gud Noob");
         }
+
+
        // Debug.Log("population : " + population + " on " + populationCapacity + " capacity jobs number : " + JobNumber + " money : " + Money + " Happyness: " + PopulationSatisfaction);
     }
     /// <summary>
@@ -139,5 +175,69 @@ public class MyGameManager : MonoBehaviour
     public void SaveGame()
     {
         SaveMyGame s = new SaveMyGame(money, population, taxes, gridManager.GridBuilding);       
+    }
+
+    public void UpdateGameUI()
+    {
+        Debug.Log("updating ui");
+
+        textMoney.text = money.ToString();
+        textPopulation.text = population.ToString();
+        textHappiness.text = populationSatisfaction.ToString();
+
+        textMoneyDetails.text = money.ToString();
+        textPopulationDetails.text = population.ToString();
+        textHappinessDetails.text = populationSatisfaction.ToString();
+
+        if (isWinningMoney)
+        {
+            imageMoney.sprite = upArrow;
+            imageMoney.color = colorGreen;
+            imageMoneyDetails.sprite = upArrow;
+            imageMoneyDetails.color = colorGreen;
+        }
+        else
+        {
+            imageMoney.sprite = downArrow;
+            imageMoney.color = colorRed;
+            imageMoneyDetails.sprite = downArrow;
+            imageMoneyDetails.color = colorRed;
+        }
+        if (isPopulationGrowing)
+        {
+            imagePopulation.sprite = upArrow;
+            imagePopulation.color = colorGreen;
+            imagePopulationDetails.sprite = upArrow;
+            imagePopulationDetails.color = colorGreen;
+        }
+        else
+        {
+            imagePopulation.sprite = downArrow;
+            imagePopulation.color = colorRed;
+            imagePopulationDetails.sprite = downArrow;
+            imagePopulationDetails.color = colorRed;
+
+        }
+    }
+
+    public void PauseGame()
+    {
+        pauseCanvas.SetActive(!pauseCanvas.activeSelf);
+        isGamePaused = pauseCanvas.activeSelf;
+        print(isGamePaused);
+    }
+
+    public void increaseTaxes()
+    {
+        taxes += 1;
+        textTaxes.text = taxes.ToString();
+
+    }
+
+    public void decreaseTaxes()
+    {
+        taxes -= 1;
+        textTaxes.text = taxes.ToString();
+
     }
 }
