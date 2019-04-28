@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
+using UnityEngine.UI;
 
 
 public class BuildingPlacer : MonoBehaviour
@@ -32,6 +33,7 @@ public class BuildingPlacer : MonoBehaviour
 
     private GameObject curentPrefab;
     private Building curentBuilding;
+    private ImageBuildingClick[] ImageBuildingClicks;
 
     private GridManager grid;
     private bool isUsingDestroyTool = false;
@@ -64,8 +66,7 @@ public class BuildingPlacer : MonoBehaviour
         powerZone = Instantiate(powerZonePrefab, new Vector3(0, -1, 0), new Quaternion());
         trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
         TryLoadSave();
-        SwitchBuilding(0);       
-
+        SwitchBuilding(0);               
     }
 
     private void TryLoadSave()
@@ -73,7 +74,6 @@ public class BuildingPlacer : MonoBehaviour
         LoadMyGame loadMyGame = FindObjectOfType<LoadMyGame>();
         if (loadMyGame!=null && loadMyGame.isSaveLoad)
         {
-            Debug.Log(loadMyGame.indicesPrefabs.Count());
             for (int i = 0; i < loadMyGame.indicesPrefabs.Count(); i++)
             {
                 GameObject g = Instantiate(BuildingPrefabs[loadMyGame.indicesPrefabs[i]], buildingsContainer.transform);
@@ -159,7 +159,6 @@ public class BuildingPlacer : MonoBehaviour
                     placementZone.SetActive(true);
                     placementZone.transform.localScale = new Vector3(curentBuilding.Size.x, 0.2f, curentBuilding.Size.z);
 
-                    print(curentBuilding.Size);
                     //Get the grid position
                     if (grid.GetNearestPointOnGrid(hitInfo.point, curentBuilding.Size, out Vector3 resultPos))
                     {
@@ -199,6 +198,17 @@ public class BuildingPlacer : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 SwitchBuilding(currentPrefabIdx, true);
+                if(ImageBuildingClicks == null)
+                {
+                    ImageBuildingClicks = Resources.FindObjectsOfTypeAll<ImageBuildingClick>();
+                }
+                foreach(ImageBuildingClick image in ImageBuildingClicks)
+                {
+                    if(image.buildingIndex == currentPrefabIdx)
+                    {
+                        myGameManager.currentImageBuilding.sprite = image.GetComponent<Image>().sprite;
+                    }
+                }
             }
             if (Input.GetKeyDown(KeyCode.E))
             {

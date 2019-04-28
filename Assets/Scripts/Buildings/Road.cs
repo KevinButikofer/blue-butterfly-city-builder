@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Road : Building
 {
-    private static readonly float range = 2.1f;
+    private static readonly float range = 2.8f;
     public static Vector3 horVect;
     public static Vector3 verVect;
     public List<Road> visitedRoads;
@@ -36,7 +36,6 @@ public class Road : Building
     /// </summary>
     public void UpdateReachability2()
     {
-        Debug.Log("test");
         visitedRoads = new List<Road>();
         Collider[] cols = Helper.CheckConnexity4(transform.position, horVect / 1.5f, verVect / 1.5f);
         foreach (Collider col in cols)
@@ -64,7 +63,6 @@ public class Road : Building
     /// </summary>
     public void UpdateReachable()
     {
-        Debug.Log("test2");
         if (IsReachable)
         {
             Collider[] cols = Helper.CheckConnexity4(transform.position, horVect / 1.5f, verVect / 1.5f);

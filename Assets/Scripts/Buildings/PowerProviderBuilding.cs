@@ -25,9 +25,10 @@ public class PowerProviderBuilding : Building
         {
             if (col.gameObject != null && col.gameObject.tag == "Building")
             {
+                print("power");
                 Building b = col.GetComponent<Building>();
                 if(!(b is PowerProviderBuilding))
-                    b.IsPowered = powerStatus;
+                    b.IsPowered = true;
             }
         }
         if(!powerStatus)

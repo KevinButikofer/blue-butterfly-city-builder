@@ -61,6 +61,8 @@ public class MyGameManager : MonoBehaviour
     private Color colorGreen = new Color32(0, 224, 68, 255);
     private Color colorRed = new Color32(255, 0, 0, 255);
 
+    public Image currentImageBuilding;
+
 
     // Start is called before the first frame update
     void Start()
@@ -180,7 +182,6 @@ public class MyGameManager : MonoBehaviour
 
     public void UpdateGameUI()
     {
-        Debug.Log("updating ui");
 
         textMoney.text = money.ToString();
         textPopulation.text = population.ToString();
@@ -228,14 +229,14 @@ public class MyGameManager : MonoBehaviour
         isGamePaused = pauseCanvas.activeSelf;
     }
 
-    public void increaseTaxes()
+    public void IncreaseTaxes()
     {
         taxes += 1;
         textTaxes.text = taxes.ToString();
 
     }
 
-    public void decreaseTaxes()
+    public void DecreaseTaxes()
     {
         taxes -= 1;
         textTaxes.text = taxes.ToString();

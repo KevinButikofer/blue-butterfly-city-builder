@@ -467,7 +467,7 @@ RectTransform:
   - {fileID: 1474668710}
   - {fileID: 636081223}
   m_Father: {fileID: 1325244013}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1936,7 +1936,7 @@ RectTransform:
   - {fileID: 1802046841}
   - {fileID: 870074676}
   m_Father: {fileID: 1325244013}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -11627,11 +11627,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1763687774}
-  - {fileID: 1161982014}
-  - {fileID: 217929495}
   - {fileID: 1773589024}
+  - {fileID: 1161982014}
   - {fileID: 36435420}
+  - {fileID: 217929495}
+  - {fileID: 1763687774}
   - {fileID: 9981101}
   - {fileID: 1952413990}
   - {fileID: 992800262}
@@ -12724,7 +12724,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: ebda44cb67bd75a4384a0a08b901af51, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e084911f8db23a340afb62131a01add9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15559,7 +15559,7 @@ RectTransform:
   - {fileID: 692673129}
   - {fileID: 736296454}
   m_Father: {fileID: 1325244013}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -15636,7 +15636,7 @@ RectTransform:
   - {fileID: 1450825181}
   - {fileID: 1308089398}
   m_Father: {fileID: 1325244013}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
