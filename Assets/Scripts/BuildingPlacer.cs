@@ -53,6 +53,8 @@ public class BuildingPlacer : MonoBehaviour
         foreach(Object o in prefabs)
         {
             GameObject b = o as GameObject;
+            Building g = b.GetComponentInChildren<Building>();
+            print(g.Size);
             BuildingPrefabs.Add(b);
         }
 
@@ -151,12 +153,13 @@ public class BuildingPlacer : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                //Click on empty space with building tool
+                //on empty space with building tool
                 if (hitInfo.transform.tag == "terrain" && !isUsingDestroyTool)
                 {
                     placementZone.SetActive(true);
                     placementZone.transform.localScale = new Vector3(curentBuilding.Size.x, 0.2f, curentBuilding.Size.z);
 
+                    print(curentBuilding.Size);
                     //Get the grid position
                     if (grid.GetNearestPointOnGrid(hitInfo.point, curentBuilding.Size, out Vector3 resultPos))
                     {
