@@ -15,6 +15,10 @@ public class LoadMyGame : MonoBehaviour
     public Vector3[] pos;
     public bool isSaveLoad;
     
+    /// <summary>
+    /// Load saved game
+    /// </summary>
+    /// <returns></returns>
     public bool Load()
     {
         try

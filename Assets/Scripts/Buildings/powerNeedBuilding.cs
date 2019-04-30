@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PowerNeedBuilding : Building
 {
-    // Start is called before the first frame update
+    /// <summary>
+    /// Check if în range of one of the power provider
+    /// </summary>
     public void CheckPowerAvailability()
     {
         grid = FindObjectOfType<GridManager>();

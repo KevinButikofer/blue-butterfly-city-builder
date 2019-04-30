@@ -17,6 +17,7 @@ public class MyGameManager : MonoBehaviour
     private int populationCapacity;
     [SerializeField]
     private GridManager gridManager;
+    private BuildingPlacer buildingPlacer;
     readonly WaitForSeconds waitForSeconds = new WaitForSeconds(1f);
     [SerializeField]
     private GameObject carContainer;
@@ -66,7 +67,8 @@ public class MyGameManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {        
+    {
+        buildingPlacer = FindObjectOfType<BuildingPlacer>();
         TryLoadSave();
         gridManager = GetComponent<GridManager>();
         StartCoroutine("UpdateGame");
@@ -85,6 +87,7 @@ public class MyGameManager : MonoBehaviour
             Money = l.money;
             Population = l.population;
             Taxes = l.taxes;
+            buildingPlacer.TryLoadSave();
             UpdateGameUI();
         }
     }

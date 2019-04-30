@@ -63,6 +63,10 @@ public class PowerProviderBuilding : Building
         return list;
     }
 
+    /// <summary>
+    /// hide or show the power zone
+    /// </summary>
+    /// <param name="b">show power zone or not</param>
     public void ShowPowerZone(bool b)
     {
         transform.parent.Find("powerZone").gameObject.SetActive(b && IsReachable);

@@ -15,7 +15,10 @@ public class CityCenter : MonoBehaviour
         ver = new Vector3(0.1f, 0.1f, size);
     }
 
-    // Update reachability of all building
+    /// <summary>
+    ///  Update reachability of all building from this building
+    /// </summary>
+    /// <param name="objectToIgnore"> object who is going to be destroy need to be ignored</param>
     public void UpdateReachability(Road objectToIgnore=null)
     {
         roadsList = new List<List<Road>>();

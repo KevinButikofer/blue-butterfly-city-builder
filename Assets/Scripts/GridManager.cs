@@ -119,6 +119,9 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// Set all building to not reacheable
+    /// </summary>
     public void ResetReacheabillity()
     {
         int i = 0;
@@ -176,7 +179,7 @@ public class GridManager : MonoBehaviour
     /// <summary>
     /// return number of building that aren't road
     /// </summary>
-    /// <returns></returns>
+    /// <returns>number of building who aren't road</returns>
     public int BuildingExceptRoadCount()
     {
         return gridBuilding.Where(x => !(x.Value is Road)).Count();

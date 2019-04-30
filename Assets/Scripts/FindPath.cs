@@ -18,6 +18,10 @@ public class FindPath : MonoBehaviour
         FindRoadPath();
         StartCoroutine(FollowPath());
     }
+    
+    /// <summary>
+    /// find a path between current position to destination using road
+    /// </summary>
     public void FindRoadPath()
     {
         Collider[] cols = Helper.CheckConnexity4(transform.position, Road.horVect * 1.5f, Road.verVect *1.5f);
@@ -41,6 +45,11 @@ public class FindPath : MonoBehaviour
         if(roads.Count == 0)
             Destroy(transform.gameObject);        
     }
+    /// <summary>
+    /// find a path between current position to destination using road
+    /// </summary>
+    /// <param name="r">road to test</param>
+    /// <returns>is the destination reach</returns>
     public bool FindRoadPath(Road r)
     {
         Collider[] cols = Helper.CheckConnexity4(r.transform.position, Road.horVect / 1.5f, Road.verVect / 1.5f);
@@ -69,6 +78,9 @@ public class FindPath : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Coroutine for car mouvement
+    /// </summary>
     IEnumerator FollowPath()
     {
         Vector3 nextPos;

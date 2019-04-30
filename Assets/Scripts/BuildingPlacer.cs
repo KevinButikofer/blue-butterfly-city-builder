@@ -33,7 +33,6 @@ public class BuildingPlacer : MonoBehaviour
 
     private GameObject curentPrefab;
     private Building curentBuilding;
-    private ImageBuildingClick[] ImageBuildingClicks;
 
     private GridManager grid;
     private bool isUsingDestroyTool = false;
@@ -42,6 +41,9 @@ public class BuildingPlacer : MonoBehaviour
 
     List<TreeInstance> trees;
     List<TreeInstance> toRemove;
+
+
+    private ImageBuildingClick[] imageBuildingClicks;
 
     public MyGameManager MyGameManager { get => myGameManager; set => myGameManager = value; }
     public List<GameObject> BuildingPrefabs { get => buildingPrefabs; set => buildingPrefabs = value; }
@@ -64,12 +66,18 @@ public class BuildingPlacer : MonoBehaviour
 
         placementZone = Instantiate(placementZonePrefab, new Vector3(0, -1, 0), new Quaternion());
         powerZone = Instantiate(powerZonePrefab, new Vector3(0, -1, 0), new Quaternion());
+
+        //get all tree on terrain
         trees = new List<TreeInstance>(Terrain.activeTerrain.terrainData.treeInstances);
+
         TryLoadSave();
         SwitchBuilding(0);               
     }
 
-    private void TryLoadSave()
+    /// <summary>
+    /// Init building from a saved game
+    /// </summary>
+    public void TryLoadSave()
     {
         LoadMyGame loadMyGame = FindObjectOfType<LoadMyGame>();
         if (loadMyGame!=null && loadMyGame.isSaveLoad)
@@ -104,9 +112,9 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    void HandleMouse()
+
+    private void HandleMouse()
     {
-        //Debug.Log("handlemouse, isusingdestroytools: "+isUsingDestroyTool);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hitInfo))
         {
@@ -198,11 +206,9 @@ public class BuildingPlacer : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 SwitchBuilding(currentPrefabIdx, true);
-                if(ImageBuildingClicks == null)
-                {
-                    ImageBuildingClicks = Resources.FindObjectsOfTypeAll<ImageBuildingClick>();
-                }
-                foreach(ImageBuildingClick image in ImageBuildingClicks)
+                if(imageBuildingClicks == null)
+                    imageBuildingClicks =  Resources.FindObjectsOfTypeAll<ImageBuildingClick>();
+                foreach (ImageBuildingClick image in imageBuildingClicks)
                 {
                     if(image.buildingIndex == currentPrefabIdx)
                     {
