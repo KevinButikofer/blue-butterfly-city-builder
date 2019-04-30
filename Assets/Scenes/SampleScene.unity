@@ -1841,7 +1841,7 @@ GameObject:
   - component: {fileID: 213827612}
   - component: {fileID: 213827611}
   m_Layer: 5
-  m_Name: ImagePopulation
+  m_Name: ImagePopulationDetails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1863,7 +1863,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 152, y: -14.700001}
+  m_AnchoredPosition: {x: 152, y: -14.699997}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &213827611
@@ -2612,7 +2612,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 66.2, y: -65.85}
+  m_AnchoredPosition: {x: 66.2, y: -76.225006}
   m_SizeDelta: {x: 92.4, y: 29.400002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &292299134
@@ -5089,7 +5089,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -234.54999}
+  m_AnchoredPosition: {x: 20, y: -286.42502}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &548055515
@@ -6074,7 +6074,7 @@ GameObject:
   - component: {fileID: 661468305}
   - component: {fileID: 661468304}
   m_Layer: 5
-  m_Name: TextHappiness
+  m_Name: TextHappinessDetails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7393,8 +7393,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 94.4, y: -157.54999}
-  m_SizeDelta: {x: 148.8, y: 29.400002}
+  m_AnchoredPosition: {x: 94.4, y: -188.675}
+  m_SizeDelta: {x: 148.8, y: 29.399994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &816747129
 MonoBehaviour:
@@ -7645,7 +7645,7 @@ GameObject:
   - component: {fileID: 858980239}
   - component: {fileID: 858980238}
   m_Layer: 5
-  m_Name: TextMoney
+  m_Name: TextMoneyDetails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8846,8 +8846,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 989047178}
-        m_MethodName: DecreaseTaxes
+      - m_Target: {fileID: 1530456522}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9000,22 +9000,9 @@ MonoBehaviour:
   - {fileID: 84897932942337927, guid: 0bbe4c1b699801145b1b47ddafe3cb25, type: 3}
   - {fileID: 4784017193235943395, guid: e74c2793dac4b1845b9fd6a488fcb9b1, type: 3}
   - {fileID: 6932000389008069818, guid: 0c17113a841aadd4290792f91e429bb7, type: 3}
-  prefabCar: {fileID: 0}
   isGamePaused: 0
-  textTaxes: {fileID: 1914642864}
-  imageMoneyDetails: {fileID: 1817419118}
-  imagePopulationDetails: {fileID: 14338226}
-  textMoneyDetails: {fileID: 1037087075}
-  textPopulationDetails: {fileID: 470675032}
-  textHappinessDetails: {fileID: 704340724}
-  textMoney: {fileID: 1037087075}
-  textPopulation: {fileID: 470675032}
-  textHappiness: {fileID: 704340724}
-  imageMoney: {fileID: 1021495032}
-  imagePopulation: {fileID: 14338226}
-  upArrow: {fileID: 21300062, guid: 6d0c3e2a3a9f42843917bab9397c1174, type: 3}
-  downArrow: {fileID: 21300066, guid: 6d0c3e2a3a9f42843917bab9397c1174, type: 3}
   currentImageBuilding: {fileID: 1433377755}
+  uI_InformationDetails: {fileID: 1530456524}
 --- !u!1 &992800261
 GameObject:
   m_ObjectHideFlags: 0
@@ -10894,7 +10881,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 66, y: -14.700001}
+  m_AnchoredPosition: {x: 66, y: -14.699997}
   m_SizeDelta: {x: 132, y: 29.400002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1225962873
@@ -12992,7 +12979,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -296.84998}
+  m_AnchoredPosition: {x: 20, y: -369.475}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1474032891
@@ -13549,6 +13536,7 @@ GameObject:
   - component: {fileID: 1530456527}
   - component: {fileID: 1530456526}
   - component: {fileID: 1530456525}
+  - component: {fileID: 1530456524}
   m_Layer: 5
   m_Name: informationCanvas
   m_TagString: Untagged
@@ -13578,6 +13566,32 @@ RectTransform:
   m_AnchoredPosition: {x: 70, y: -50}
   m_SizeDelta: {x: -200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1530456524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530456522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33095ffc69a0dc147a7659d6a8cbbcc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textTaxes: {fileID: 1914642864}
+  imageMoneyDetails: {fileID: 1817419118}
+  imagePopulationDetails: {fileID: 213827611}
+  textMoneyDetails: {fileID: 858980239}
+  textPopulationDetails: {fileID: 2127249173}
+  textHappinessDetails: {fileID: 661468305}
+  textMoney: {fileID: 1037087075}
+  textPopulation: {fileID: 470675032}
+  textHappiness: {fileID: 704340724}
+  imageMoney: {fileID: 1021495032}
+  imagePopulation: {fileID: 14338226}
+  upArrow: {fileID: 21300062, guid: 6d0c3e2a3a9f42843917bab9397c1174, type: 3}
+  downArrow: {fileID: 21300066, guid: 6d0c3e2a3a9f42843917bab9397c1174, type: 3}
+  canvasDetails: {fileID: 1732334221}
 --- !u!114 &1530456525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14574,9 +14588,9 @@ RectTransform:
   m_Father: {fileID: 1732334215}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 207, y: 132}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -43.2, y: -41.3}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1685931398
@@ -14632,9 +14646,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1859503967}
-        m_MethodName: set_IsMenuActive
-        m_Mode: 6
+      - m_Target: {fileID: 1530456524}
+        m_MethodName: ShowHideDetails
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -17098,7 +17112,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1859503965}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1530456524}
+        m_MethodName: ShowHideDetails
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1859503965
@@ -18155,9 +18180,9 @@ RectTransform:
   m_Father: {fileID: 1685931397}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -50, y: -50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1988992570
@@ -18995,7 +19020,7 @@ GameObject:
   - component: {fileID: 2127249173}
   - component: {fileID: 2127249172}
   m_Layer: 5
-  m_Name: TextPopulation
+  m_Name: TextPopulationDetails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19017,7 +19042,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.4, y: -14.700001}
+  m_AnchoredPosition: {x: 180.4, y: -14.699997}
   m_SizeDelta: {x: 16.800001, y: 29.400002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2127249172

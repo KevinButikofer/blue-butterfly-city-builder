@@ -9,7 +9,6 @@ public class MyGameManager : MonoBehaviour
 {
     private float money = 1000000;
     private int population = 0;
-    private int power = 0;
     private float populationSatisfaction;
     private float unemploymentRate;
     private int jobNumber;
@@ -28,41 +27,25 @@ public class MyGameManager : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> listPrefabCars;
-    [SerializeField]
-    private GameObject prefabCar;
     private List<GameObject> cars = new List<GameObject>();
     private float nextSpawnTime;
 
     public bool isGamePaused = false;
 
     public int Population { get => population; set => population = value; }
-    public int Power { get => power; set => power = value; }
     public float PopulationSatisfaction { get => populationSatisfaction; set => populationSatisfaction = value; }
     public float UnemploymentRate { get => unemploymentRate; set => unemploymentRate = value; }
     public int JobNumber { get => jobNumber; set => jobNumber = value; }
     public float Money { get => money; set => money = value; }
     public float Taxes { get => taxes; set => taxes = value; }
     public List<GameObject> Cars { get => cars; set => cars = value; }
+    
 
-    public Text textTaxes;
-    public Image imageMoneyDetails;
-    public Image imagePopulationDetails;
-    public Text textMoneyDetails;
-    public Text textPopulationDetails;
-    public Text textHappinessDetails;
-    public Text textMoney;
-    public Text textPopulation;
-    public Text textHappiness;
-    public Image imageMoney;
-    public Image imagePopulation;
-    public Sprite upArrow;
-    public Sprite downArrow;
     private bool isPopulationGrowing;
     private bool isWinningMoney;
-    private Color colorGreen = new Color32(0, 224, 68, 255);
-    private Color colorRed = new Color32(255, 0, 0, 255);
 
     public Image currentImageBuilding;
+    public UI_InformationDetailsHandler uI_InformationDetails;
 
 
     // Start is called before the first frame update
@@ -185,46 +168,12 @@ public class MyGameManager : MonoBehaviour
 
     public void UpdateGameUI()
     {
-
-        textMoney.text = money.ToString();
-        textPopulation.text = population.ToString();
-        textHappiness.text = populationSatisfaction.ToString();
-
-        textMoneyDetails.text = money.ToString();
-        textPopulationDetails.text = population.ToString();
-        textHappinessDetails.text = populationSatisfaction.ToString();
-
-        if (isWinningMoney)
-        {
-            imageMoney.sprite = upArrow;
-            imageMoney.color = colorGreen;
-            imageMoneyDetails.sprite = upArrow;
-            imageMoneyDetails.color = colorGreen;
-        }
-        else
-        {
-            imageMoney.sprite = downArrow;
-            imageMoney.color = colorRed;
-            imageMoneyDetails.sprite = downArrow;
-            imageMoneyDetails.color = colorRed;
-        }
-        if (isPopulationGrowing)
-        {
-            imagePopulation.sprite = upArrow;
-            imagePopulation.color = colorGreen;
-            imagePopulationDetails.sprite = upArrow;
-            imagePopulationDetails.color = colorGreen;
-        }
-        else
-        {
-            imagePopulation.sprite = downArrow;
-            imagePopulation.color = colorRed;
-            imagePopulationDetails.sprite = downArrow;
-            imagePopulationDetails.color = colorRed;
-
-        }
+        uI_InformationDetails.UpdateGameUI(Money, Population, populationSatisfaction, isWinningMoney, isPopulationGrowing);
     }
-
+    
+    /// <summary>
+    /// Pause the game and shoe pause menu
+    /// </summary>
     public void PauseGame()
     {
         UiCanvas.SetActive(pauseCanvas.activeSelf);
@@ -232,17 +181,21 @@ public class MyGameManager : MonoBehaviour
         isGamePaused = pauseCanvas.activeSelf;
     }
 
+    /// <summary>
+    /// Increase taxes
+    /// </summary>
     public void IncreaseTaxes()
     {
         taxes += 1;
-        textTaxes.text = taxes.ToString();
-
+        uI_InformationDetails.textTaxes.text = taxes.ToString();
     }
 
+    /// <summary>
+    /// Decrease taxes
+    /// </summary>
     public void DecreaseTaxes()
     {
         taxes -= 1;
-        textTaxes.text = taxes.ToString();
-
+        uI_InformationDetails.textTaxes.text = taxes.ToString();
     }
 }
