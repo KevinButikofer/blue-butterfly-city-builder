@@ -13,7 +13,12 @@ public class PowerProviderBuilding : Building
     private int workerCapacity;
 
     public int WorkerCapacity { get => workerCapacity; }
+    private GameObject powerZone;
 
+    private void Start()
+    {
+       
+    }
     /// <summary>
     /// Give power in the range of the buiding
     /// </summary>
@@ -25,7 +30,6 @@ public class PowerProviderBuilding : Building
         {
             if (col.gameObject != null && col.gameObject.tag == "Building")
             {
-                print("power");
                 Building b = col.GetComponent<Building>();
                 if(!(b is PowerProviderBuilding))
                     b.IsPowered = true;
@@ -47,7 +51,7 @@ public class PowerProviderBuilding : Building
     /// <returns></returns>
     public bool IsInRange(Vector3 otherPos)
     {
-        if(Vector3.Distance(transform.position, otherPos) - powerRange <= 0.0f)
+        if(Vector3.Distance(transform.position, otherPos) * 2 - powerRange <= 0.0f)
             return true;
         return false;
     }
@@ -69,6 +73,11 @@ public class PowerProviderBuilding : Building
     /// <param name="b">show power zone or not</param>
     public void ShowPowerZone(bool b)
     {
-        transform.parent.Find("powerZone").gameObject.SetActive(b && IsReachable);
+        if(powerZone == null)
+        {
+            powerZone = transform.parent.Find("powerZone").gameObject;
+            powerZone.transform.localScale = new Vector3(powerRange, 0.5f, powerRange);
+        }
+        powerZone.SetActive(b && IsReachable);
     }
 }

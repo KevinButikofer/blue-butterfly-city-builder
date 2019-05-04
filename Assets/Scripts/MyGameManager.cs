@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class MyGameManager : MonoBehaviour
 {
-    private float money = 1000000;
+    private float money = 100000;
     private int population = 0;
     private float populationSatisfaction;
     private float unemploymentRate;
@@ -22,6 +22,8 @@ public class MyGameManager : MonoBehaviour
     private GameObject carContainer;
     [SerializeField]
     private GameObject pauseCanvas;
+    [SerializeField]
+    private GameObject optionCanvas;
     [SerializeField]
     private GameObject UiCanvas;
 
@@ -57,6 +59,8 @@ public class MyGameManager : MonoBehaviour
         StartCoroutine("UpdateGame");
         pauseCanvas.SetActive(false);
         isGamePaused = false;
+        PauseGame();
+        PauseGame();
     }
     private void Awake()
     {
@@ -120,14 +124,14 @@ public class MyGameManager : MonoBehaviour
         UpdateGameVar();
         if (populationCapacity > population)
         {
-            if (PopulationSatisfaction > 50)
+            if (PopulationSatisfaction > 0)
             {
-                population++;
+                population += 5;
                 isPopulationGrowing = true;
             }               
             else
             {
-                population = Mathf.Min(0, population--);
+                population = Mathf.Max(0, population -= 2);
                 isPopulationGrowing = false;
             }
         }
@@ -139,11 +143,12 @@ public class MyGameManager : MonoBehaviour
     /// </summary>
     public void UpdateGameVar()
     {
-        gridManager.UpdateGameVar(out int jobs, out int populationNumber, out int money);
-        JobNumber = jobs;
+        gridManager.UpdateGameVar(out int jobs, out int populationNumber, out int money, out int happyness);
+        JobNumber = jobs;        
         populationCapacity = populationNumber;
-        populationSatisfaction = (jobNumber / Mathf.Max(population, 1) - Taxes * 0.10f) * 100;
-        float moneyWin = population * Taxes / 10 + Mathf.Min(JobNumber, population) / 10 + money;
+        unemploymentRate = JobNumber > population ? 0 : 1 - JobNumber / Mathf.Max(population, 1);
+        populationSatisfaction = ((-unemploymentRate == 0 ? 0 : -unemploymentRate) * 10) - Taxes * 10f + happyness * 2 + 20;
+        float moneyWin = population * Taxes  + Mathf.Min(JobNumber, population) + money;
         Money += moneyWin;
         if (moneyWin > 0)
             isWinningMoney = true;
@@ -176,6 +181,7 @@ public class MyGameManager : MonoBehaviour
     /// </summary>
     public void PauseGame()
     {
+        optionCanvas.SetActive(false);
         UiCanvas.SetActive(pauseCanvas.activeSelf);
         pauseCanvas.SetActive(!pauseCanvas.activeSelf);
         isGamePaused = pauseCanvas.activeSelf;

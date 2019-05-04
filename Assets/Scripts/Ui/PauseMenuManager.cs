@@ -24,6 +24,7 @@ public class PauseMenuManager : MonoBehaviour
     {
         //Resume game
         //gameCanvas.SetActive(true);
+        btns.SetActive(true);
         Time.timeScale = 1;
     }
     public void Save()
@@ -42,6 +43,7 @@ public class PauseMenuManager : MonoBehaviour
     public void ReturnToGame()
     {
         //gameObject.SetActive(false);
+        btns.SetActive(true);
         myGameManager.PauseGame();
     }
     public void QuitGame()

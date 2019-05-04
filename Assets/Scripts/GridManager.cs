@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class GridManager : MonoBehaviour
 {
@@ -154,11 +155,12 @@ public class GridManager : MonoBehaviour
     /// <param name="nbJobs">out total number of job</param>
     /// <param name="habitantCapacity">out total number of rensident capacity</param>
     /// <param name="money">out money win or loose</param>
-    public void UpdateGameVar(out int nbJobs, out int habitantCapacity, out int money)
+    public void UpdateGameVar(out int nbJobs, out int habitantCapacity, out int money, out int buildinghappyness)
     {
         nbJobs = 0;
         habitantCapacity = 0;
         money = 0;
+        buildinghappyness = 0;
         foreach (KeyValuePair<int, Building> item in GridBuilding)
         {
             if (item.Value.IsReachable && item.Value.IsPowered)
@@ -167,9 +169,17 @@ public class GridManager : MonoBehaviour
                 {
                     nbJobs += (item.Value as WorkPlace).WorkerCapacity;
                 }
+                if (item.Value is PowerProviderBuilding)
+                {
+                    nbJobs += (item.Value as PowerProviderBuilding).WorkerCapacity;
+                }
                 if (item.Value is Home)
                 {
                     habitantCapacity += (item.Value as Home).ResidentCapacity;
+                }
+                if (item.Value is HappinessBuilding)
+                {
+                    buildinghappyness += (item.Value as HappinessBuilding).Happiness;
                 }
             }
             money -= item.Value.MaintenanceCost;
@@ -183,6 +193,17 @@ public class GridManager : MonoBehaviour
     public int BuildingExceptRoadCount()
     {
         return gridBuilding.Where(x => !(x.Value is Road)).Count();
+    }
+
+
+    /// <summary>
+    /// return the number of given type building on the grid
+    /// </summary>
+    /// <param name="t">type of building</param>
+    /// <returns>numbber of given type</returns>
+    public int NumberOfGivenTypeBuidings(Type t)
+    {
+        return gridBuilding.Where(x => x.Value.GetType() == t).Count();
     }
 
 }
